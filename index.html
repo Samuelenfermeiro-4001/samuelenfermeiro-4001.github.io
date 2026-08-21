@@ -253,7 +253,7 @@
       Foto de perfil
     </button>
   </div>
-  <div class="download-caption"><strong>Post quadrado</strong> tem a moldura completa. <strong>Foto de perfil</strong> &eacute; o recorte redondo com o selo 4001, para avatar do WhatsApp e Instagram.</div>
+  <div class="download-caption">Os dois trazem a moldura completa. A <strong>foto de perfil</strong> vem reduzida, para caber inteira no recorte redondo do WhatsApp e do Instagram.</div>
 
   <button class="btn btn-full" id="campaignBtn">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -473,23 +473,6 @@
     rctx.closePath();
   }
 
-  function drawDotCorner(dctx, x, y, w, h, color) {
-    dctx.save();
-    dctx.beginPath();
-    dctx.rect(x, y, w, h);
-    dctx.clip();
-    dctx.fillStyle = color;
-    var spacing = 22, r = 4;
-    for (var yy = y; yy < y + h + spacing; yy += spacing) {
-      for (var xx = x; xx < x + w + spacing; xx += spacing) {
-        dctx.beginPath();
-        dctx.arc(xx, yy, r, 0, Math.PI * 2);
-        dctx.fill();
-      }
-    }
-    dctx.restore();
-  }
-
   // "Post quadrado" (1:1) — the whole story frame, centered on a soft backdrop.
   function renderFeedCanvas() {
     var size = 1080;
@@ -518,53 +501,44 @@
     return c;
   }
 
-  // "Foto de perfil" (1:1) — circular ring only, no name banner, for WhatsApp/Instagram avatars.
+  // "Foto de perfil" (1:1) — moldura completa, reduzida para caber inteira dentro do
+  // recorte redondo que WhatsApp e Instagram aplicam no avatar. Por isso a arte entra
+  // pela diagonal: se coubesse apenas no quadrado, o app cortaria topo e base.
   function renderProfileCanvas() {
     var size = 1080;
     var c = document.createElement('canvas');
     c.width = size; c.height = size;
     var pctx = c.getContext('2d');
+
     var grad = pctx.createLinearGradient(0, 0, size, size);
     grad.addColorStop(0, '#16296b');
     grad.addColorStop(1, '#060f30');
     pctx.fillStyle = grad;
     pctx.fillRect(0, 0, size, size);
-    drawDotCorner(pctx, size - 190, 0, 190, 190, 'rgba(255,199,44,0.9)');
 
-    var cx = size / 2, cy = size / 2, R = 430;
-    pctx.beginPath(); pctx.arc(cx, cy, R + 26, 0, Math.PI * 2);
-    pctx.fillStyle = '#ffc72c'; pctx.fill();
-    pctx.beginPath(); pctx.arc(cx, cy, R + 13, 0, Math.PI * 2);
-    pctx.fillStyle = '#ffffff'; pctx.fill();
+    render();
+
+    // diagonal da arte <= diametro do circulo inscrito, com uma folga de 3%
+    var diagonal = Math.sqrt(CANVAS_W * CANVAS_W + CANVAS_H * CANVAS_H);
+    var scale = (size * 0.97) / diagonal;
+    var drawW = CANVAS_W * scale, drawH = CANVAS_H * scale;
+    var dx = (size - drawW) / 2, dy = (size - drawH) / 2;
+    var radius = 26 * scale;
 
     pctx.save();
-    pctx.beginPath(); pctx.arc(cx, cy, R, 0, Math.PI * 2); pctx.clip();
-    pctx.fillStyle = '#dfe3ea';
-    pctx.fillRect(cx - R, cy - R, R * 2, R * 2);
-    if (photo) {
-      var scale = Math.max((R * 2) / naturalW, (R * 2) / naturalH) * zoom;
-      var drawW = naturalW * scale, drawH = naturalH * scale;
-      var relX = offsetX * (R / HOLE_RX);
-      var relY = offsetY * (R / HOLE_RY);
-      var dx = cx + relX - drawW / 2;
-      var dy = cy + relY - drawH / 2;
-      pctx.drawImage(photo, dx, dy, drawW, drawH);
-    }
+    pctx.shadowColor = 'rgba(0,0,0,0.45)';
+    pctx.shadowBlur = 38;
+    pctx.shadowOffsetY = 12;
+    roundRectPath(pctx, dx, dy, drawW, drawH, radius);
+    pctx.fillStyle = '#0d1b4c';
+    pctx.fill();
     pctx.restore();
 
-    var badgeAngle = (50 * Math.PI) / 180;
-    var bx = cx + R * Math.cos(badgeAngle);
-    var by = cy + R * Math.sin(badgeAngle);
-    pctx.beginPath(); pctx.arc(bx, by, 76, 0, Math.PI * 2);
-    pctx.fillStyle = '#ffffff'; pctx.fill();
-    pctx.beginPath(); pctx.arc(bx, by, 63, 0, Math.PI * 2);
-    pctx.fillStyle = '#ffc72c'; pctx.fill();
-    pctx.fillStyle = '#12245c';
-    pctx.textAlign = 'center'; pctx.textBaseline = 'middle';
-    pctx.font = '800 20px Manrope, sans-serif';
-    pctx.fillText('Nº', bx, by - 20);
-    pctx.font = '800 32px "Baloo 2", sans-serif';
-    pctx.fillText('4001', bx, by + 15);
+    pctx.save();
+    roundRectPath(pctx, dx, dy, drawW, drawH, radius);
+    pctx.clip();
+    pctx.drawImage(canvas, dx, dy, drawW, drawH);
+    pctx.restore();
 
     return c;
   }
@@ -573,6 +547,7 @@
   function baixarFormato(tipo, botao) {
     if (!photo) return;
     var alvo, nome;
+    render();
     if (tipo === 'feed') {
       alvo = renderFeedCanvas();
       nome = 'samuel-enfermeiro-post.png';
@@ -580,7 +555,6 @@
       alvo = renderProfileCanvas();
       nome = 'samuel-enfermeiro-perfil.png';
     } else {
-      render();
       alvo = canvas;
       nome = 'samuel-enfermeiro-story.png';
     }
