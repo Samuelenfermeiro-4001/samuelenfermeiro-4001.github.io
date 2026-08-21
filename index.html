@@ -121,6 +121,33 @@
     font-size: 11px; color: var(--muted); text-align: center;
     margin-top: 8px; line-height: 1.4;
   }
+  .btn-ghost {
+    background: var(--card); color: var(--navy);
+    border: 1.5px solid var(--ring); box-shadow: 0 2px 8px rgba(13,27,76,0.08);
+  }
+  .btn-ghost svg { color: var(--navy); }
+  .btn-ghost:disabled { background: #f1f3f8; color: #a8b0c2; border-color: transparent; box-shadow: none; }
+  .btn-ghost:disabled svg { color: #a8b0c2; }
+  .btn-row-alt { margin-top: 10px; }
+
+  .ig-card {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: 18px; padding: 13px 15px;
+    background: var(--card); border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(13,27,76,0.08);
+    text-decoration: none; color: inherit;
+    cursor: pointer; user-select: none; -webkit-user-select: none;
+  }
+  .ig-card:active { transform: translateY(1px); }
+  .ig-icon {
+    width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0; color: #fff;
+    background: linear-gradient(45deg, #f9ce34 0%, #ee2a7b 50%, #6228d7 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ig-text { flex: 1; min-width: 0; }
+  .ig-handle { font-weight: 800; font-size: 14px; color: var(--navy); }
+  .ig-cta { font-size: 11.5px; color: var(--muted); margin-top: 2px; line-height: 1.35; }
+  .ig-chev { color: var(--muted); flex-shrink: 0; }
   .btn:disabled {
     background: #b9c2d6; box-shadow: none; cursor: not-allowed;
   }
@@ -208,9 +235,25 @@
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M12 3v12M7 10l5 5 5-5M4 19h16"/>
     </svg>
-    Baixar fotos (Story, Feed e Perfil)
+    Baixar foto com moldura
   </button>
-  <div class="download-caption">Gera 3 tamanhos: Story 9:16, post quadrado 1:1 e foto de perfil 1:1 (WhatsApp/Instagram)</div>
+  <div class="download-caption">Formato 9:16, com a moldura completa &mdash; ideal para Story e status do WhatsApp</div>
+
+  <div class="btn-row btn-row-alt">
+    <button class="btn btn-ghost" id="downloadFeedBtn" disabled>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3.5" y="3.5" width="17" height="17" rx="3"/>
+      </svg>
+      Post quadrado
+    </button>
+    <button class="btn btn-ghost" id="downloadProfileBtn" disabled>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="8.5"/>
+      </svg>
+      Foto de perfil
+    </button>
+  </div>
+  <div class="download-caption"><strong>Post quadrado</strong> tem a moldura completa. <strong>Foto de perfil</strong> &eacute; o recorte redondo com o selo 4001, para avatar do WhatsApp e Instagram.</div>
 
   <button class="btn btn-full" id="campaignBtn">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -219,6 +262,23 @@
     </svg>
     Compartilhar campanha
   </button>
+
+  <a class="ig-card" id="igCard" href="https://www.instagram.com/samuelenfermeiro/" target="_blank" rel="noopener noreferrer">
+    <div class="ig-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2.5" y="2.5" width="19" height="19" rx="5.4"/>
+        <circle cx="12" cy="12" r="4.2"/>
+        <circle cx="17.6" cy="6.4" r="1.2" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+    <div class="ig-text">
+      <div class="ig-handle">@samuelenfermeiro</div>
+      <div class="ig-cta">Se voc&ecirc; n&atilde;o segue, come&ccedil;a a seguir a nossa p&aacute;gina</div>
+    </div>
+    <svg class="ig-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 5l7 7-7 7"/>
+    </svg>
+  </a>
 
   <div class="footer"><strong>Samuel Enfermeiro</strong> · Vote 4001</div>
 </div>
@@ -245,6 +305,8 @@
   var photoBtnLabel = document.getElementById('photoBtnLabel');
   var shareBtn = document.getElementById('shareBtn');
   var downloadBtn = document.getElementById('downloadBtn');
+  var downloadFeedBtn = document.getElementById('downloadFeedBtn');
+  var downloadProfileBtn = document.getElementById('downloadProfileBtn');
   var campaignBtn = document.getElementById('campaignBtn');
   var fileInput = document.getElementById('fileInput');
   var toastEl = document.getElementById('toast');
@@ -316,6 +378,8 @@
       hintOverlay.style.display = 'none';
       stage.classList.add('has-photo');
       downloadBtn.disabled = false;
+      downloadFeedBtn.disabled = false;
+      downloadProfileBtn.disabled = false;
       shareBtn.disabled = false;
       photoBtnLabel.textContent = 'Trocar foto';
       render();
@@ -505,22 +569,35 @@
     return c;
   }
 
-  downloadBtn.addEventListener('click', async function () {
+  // Um arquivo por toque: navegador de celular costuma bloquear downloads em sequência.
+  function baixarFormato(tipo, botao) {
     if (!photo) return;
-    downloadBtn.disabled = true;
-    try {
+    var alvo, nome;
+    if (tipo === 'feed') {
+      alvo = renderFeedCanvas();
+      nome = 'samuel-enfermeiro-post.png';
+    } else if (tipo === 'perfil') {
+      alvo = renderProfileCanvas();
+      nome = 'samuel-enfermeiro-perfil.png';
+    } else {
       render();
-      var storyBlob = await canvasToBlob(canvas);
-      if (storyBlob) await saveBlob(storyBlob, 'samuel-enfermeiro-story.png');
-      var feedBlob = await canvasToBlob(renderFeedCanvas());
-      if (feedBlob) await saveBlob(feedBlob, 'samuel-enfermeiro-feed.png');
-      var profileBlob = await canvasToBlob(renderProfileCanvas());
-      if (profileBlob) await saveBlob(profileBlob, 'samuel-enfermeiro-perfil.png');
-      showToast('3 fotos baixadas!');
-    } finally {
-      downloadBtn.disabled = false;
+      alvo = canvas;
+      nome = 'samuel-enfermeiro-story.png';
     }
-  });
+    botao.disabled = true;
+    canvasToBlob(alvo).then(function (blob) {
+      if (!blob) return;
+      return saveBlob(blob, nome).then(function () { showToast('Foto baixada!'); });
+    }).catch(function () {
+      showToast('Não foi possível baixar. Tente de novo.');
+    }).then(function () {
+      botao.disabled = false;
+    });
+  }
+
+  downloadBtn.addEventListener('click', function () { baixarFormato('story', downloadBtn); });
+  downloadFeedBtn.addEventListener('click', function () { baixarFormato('feed', downloadFeedBtn); });
+  downloadProfileBtn.addEventListener('click', function () { baixarFormato('perfil', downloadProfileBtn); });
 
   shareBtn.addEventListener('click', function () {
     canvas.toBlob(function (blob) {
