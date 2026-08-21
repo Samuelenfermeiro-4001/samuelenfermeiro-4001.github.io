@@ -253,7 +253,7 @@
       Foto de perfil
     </button>
   </div>
-  <div class="download-caption">Os dois trazem a moldura completa. A <strong>foto de perfil</strong> vem reduzida, para caber inteira no recorte redondo do WhatsApp e do Instagram.</div>
+  <div class="download-caption"><strong>Post quadrado</strong> traz a arte inteira. <strong>Foto de perfil</strong> preenche todo o quadrado, sem sobra de fundo, e mantém o nome vis&iacute;vel no recorte redondo do WhatsApp e do Instagram.</div>
 
   <button class="btn btn-full" id="campaignBtn">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -501,11 +501,14 @@
     return c;
   }
 
-  // "Foto de perfil" (1:1) — moldura completa, reduzida para caber inteira dentro do
-  // recorte redondo que WhatsApp e Instagram aplicam no avatar. Por isso a arte entra
-  // pela diagonal: se coubesse apenas no quadrado, o app cortaria topo e base.
+  // Faixa do lockup "VOTE 4001 / Samuel Enfermeiro" dentro da arte de 900x1600.
+  var LOCKUP_Y = 1000, LOCKUP_H = 512;
+
+  // "Foto de perfil" (1:1) — a arte preenche o quadrado inteiro, sem sobra de fundo.
+  // A foto ocupa quase todo o circulo e o lockup entra por cima, dimensionado para
+  // caber dentro do recorte redondo que WhatsApp e Instagram aplicam no avatar.
   function renderProfileCanvas() {
-    var size = 1080;
+    var size = 1080, cx = size / 2, cy = size / 2;
     var c = document.createElement('canvas');
     c.width = size; c.height = size;
     var pctx = c.getContext('2d');
@@ -516,29 +519,44 @@
     pctx.fillStyle = grad;
     pctx.fillRect(0, 0, size, size);
 
-    render();
-
-    // diagonal da arte <= diametro do circulo inscrito, com uma folga de 3%
-    var diagonal = Math.sqrt(CANVAS_W * CANVAS_W + CANVAS_H * CANVAS_H);
-    var scale = (size * 0.97) / diagonal;
-    var drawW = CANVAS_W * scale, drawH = CANVAS_H * scale;
-    var dx = (size - drawW) / 2, dy = (size - drawH) / 2;
-    var radius = 26 * scale;
-
+    // foto preenchendo o circulo, respeitando o enquadramento escolhido pelo usuario
+    var R = 528;
     pctx.save();
-    pctx.shadowColor = 'rgba(0,0,0,0.45)';
-    pctx.shadowBlur = 38;
-    pctx.shadowOffsetY = 12;
-    roundRectPath(pctx, dx, dy, drawW, drawH, radius);
-    pctx.fillStyle = '#0d1b4c';
-    pctx.fill();
+    pctx.beginPath(); pctx.arc(cx, cy, R, 0, Math.PI * 2); pctx.clip();
+    pctx.fillStyle = '#dfe3ea';
+    pctx.fillRect(cx - R, cy - R, R * 2, R * 2);
+    if (photo) {
+      var escala = Math.max((R * 2) / naturalW, (R * 2) / naturalH) * zoom;
+      var pw = naturalW * escala, ph = naturalH * escala;
+      var px = cx + offsetX * (R / HOLE_RX) - pw / 2;
+      var py = cy + offsetY * (R / HOLE_RY) - ph / 2;
+      pctx.drawImage(photo, px, py, pw, ph);
+    }
     pctx.restore();
 
-    pctx.save();
-    roundRectPath(pctx, dx, dy, drawW, drawH, radius);
-    pctx.clip();
-    pctx.drawImage(canvas, dx, dy, drawW, drawH);
-    pctx.restore();
+    // aro dourado na borda do circulo
+    pctx.beginPath(); pctx.arc(cx, cy, R - 7, 0, Math.PI * 2);
+    pctx.lineWidth = 14; pctx.strokeStyle = '#ffc72c'; pctx.stroke();
+
+    // lockup recortado da propria arte, dentro do circulo
+    if (frameReady) {
+      var lw = 566, lh = lw * LOCKUP_H / CANVAS_W;
+      var lx = cx - lw / 2, ly = 985 - lh;
+      var raio = 20;
+      pctx.save();
+      pctx.shadowColor = 'rgba(0,0,0,0.4)';
+      pctx.shadowBlur = 26;
+      pctx.shadowOffsetY = 8;
+      roundRectPath(pctx, lx, ly, lw, lh, raio);
+      pctx.fillStyle = '#ffffff';
+      pctx.fill();
+      pctx.restore();
+      pctx.save();
+      roundRectPath(pctx, lx, ly, lw, lh, raio);
+      pctx.clip();
+      pctx.drawImage(frameImg, 0, LOCKUP_Y, CANVAS_W, LOCKUP_H, lx, ly, lw, lh);
+      pctx.restore();
+    }
 
     return c;
   }
