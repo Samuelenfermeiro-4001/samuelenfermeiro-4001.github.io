@@ -372,7 +372,10 @@
       baseScale = Math.max((HOLE_RX * 2) / naturalW, (HOLE_RY * 2) / naturalH);
       zoom = 1;
       offsetX = 0;
-      offsetY = 0;
+      // Enquadramento inicial mirando um pouco acima do centro: em retrato o rosto
+      // fica no terco superior, e centralizar corta o alto da cabeca.
+      offsetY = naturalH * 0.10 * baseScale;
+      clampOffsets();
       zoomInput.disabled = false;
       zoomInput.value = 100;
       hintOverlay.style.display = 'none';
