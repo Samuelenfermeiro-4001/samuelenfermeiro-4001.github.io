@@ -45,7 +45,7 @@
     backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--line)
   }
   .topbar .wrap{display:flex;align-items:center;gap:18px;height:64px}
-  .brand img{height:34px;width:auto}
+  .brand img{height:30px;width:auto}
   .nav{display:none;margin-left:auto;gap:26px;font-size:14px;font-weight:600}
   .nav a{text-decoration:none;color:var(--navy);opacity:.78}
   .nav a:hover{opacity:1}
@@ -74,7 +74,7 @@
   .hero{position:relative;background:var(--navy-deep);color:#fff;overflow:hidden}
   .hero-photo{
     position:absolute;inset:0;
-    background:url('../assets/samuel-hero.jpg') center 10% / cover no-repeat;
+    background:url('../assets/samuel-hero.jpg') center 18% / cover no-repeat;
     opacity:.66
   }
   .hero::after{
@@ -82,7 +82,7 @@
     background:linear-gradient(180deg,rgba(8,19,53,.42) 0%,rgba(8,19,53,.7) 48%,rgba(8,19,53,.97) 100%)
   }
   @media(min-width:820px){
-    .hero-photo{left:auto;right:0;width:52%;opacity:1;background-position:center 8%}
+    .hero-photo{left:auto;right:0;width:50%;opacity:1;background-position:center 14%}
     .hero::after{background:linear-gradient(90deg,var(--navy-deep) 34%,rgba(8,19,53,.86) 52%,rgba(8,19,53,.15) 100%)}
   }
   .hero-inner{position:relative;z-index:2;padding:72px 0 62px}
@@ -95,6 +95,40 @@
   .hero-cta{display:flex;flex-direction:column;gap:12px;margin-top:32px}
   @media(min-width:560px){ .hero-cta{flex-direction:row;flex-wrap:wrap} }
   .hero-rule{width:64px;height:5px;background:var(--gold);margin-bottom:26px;border-radius:2px}
+  .numero-hero{
+    font-family:Archivo,sans-serif;font-weight:900;font-size:clamp(40px,10vw,72px);
+    line-height:.9;color:var(--gold);margin:0 0 18px;letter-spacing:-.03em;
+    display:flex;align-items:baseline;gap:12px
+  }
+  .numero-hero span{
+    font-size:15px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;
+    color:#fff;opacity:.9
+  }
+
+  /* ---------- crie sua foto ---------- */
+  .sec-foto{background:var(--mist);border-bottom:1px solid var(--line)}
+  .foto-grid{display:grid;gap:34px;align-items:center}
+  @media(min-width:880px){ .foto-grid{grid-template-columns:1fr 1fr;gap:56px} }
+  .foto-grid h2{font-size:clamp(28px,5.4vw,42px);font-weight:800;color:var(--navy)}
+  .passos{margin:22px 0 26px;padding:0;list-style:none;counter-reset:p}
+  .passos li{
+    counter-increment:p;position:relative;padding:7px 0 7px 42px;font-size:15.5px;color:#3a4055
+  }
+  .passos li::before{
+    content:counter(p);position:absolute;left:0;top:6px;width:27px;height:27px;
+    background:var(--navy);color:#fff;border-radius:50%;display:flex;
+    align-items:center;justify-content:center;font-family:Archivo,sans-serif;
+    font-weight:800;font-size:13px
+  }
+  .foto-exemplos{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+  .foto-exemplos figure{margin:0}
+  .foto-exemplos img{
+    width:100%;border-radius:8px;box-shadow:0 14px 34px rgba(13,27,76,.16)
+  }
+  .foto-exemplos figcaption{
+    margin-top:9px;text-align:center;font-family:Archivo,sans-serif;font-weight:800;
+    font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)
+  }
 
   /* ---------- secoes ---------- */
   section{padding:72px 0}
@@ -190,6 +224,15 @@
     line-height:1.3;color:var(--navy);border-left:5px solid var(--gold);
     padding-left:20px;margin:26px 0
   }
+  .lista-leis{margin:18px 0 0;padding:0;list-style:none}
+  .lista-leis li{
+    position:relative;padding:8px 0 8px 26px;font-size:15.5px;color:#3a4055;
+    border-bottom:1px solid var(--line)
+  }
+  .lista-leis li::before{
+    content:"";position:absolute;left:2px;top:16px;width:9px;height:9px;
+    background:var(--gold);border-radius:2px
+  }
   .causas{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}
   .causa{
     font-family:Archivo,sans-serif;font-weight:700;font-size:13px;letter-spacing:.03em;
@@ -238,7 +281,7 @@
   .fechamento .hero-rule{margin-bottom:24px}
   .rodape{background:var(--navy-deep);color:#8f9ab5;font-size:13px;padding:38px 0}
   .rodape .wrap{display:grid;gap:18px}
-  .rodape img{height:44px;width:auto;opacity:.9;filter:brightness(0) invert(1)}
+  .rodape img{height:38px;width:auto;opacity:.95}
   .rodape a{color:#c3cbdf}
   .rodape .legal{font-size:12px;line-height:1.6;border-top:1px solid rgba(255,255,255,.12);padding-top:16px}
 
@@ -263,7 +306,7 @@
       <img src="../assets/logo-samuel.png" alt="Samuel Enfermeiro — Deputado Federal">
     </a>
     <nav class="nav" aria-label="Principal">
-      <a href="#acoes">Participar</a>
+      <a href="#minha-foto">Minha foto</a>
       <a href="#amigos">Amigos do Samuel</a>
       <a href="#conheca">Conheça</a>
       <a href="#informacao">Informação</a>
@@ -279,7 +322,7 @@
   <div class="hero-photo" role="img" aria-label="Samuel Enfermeiro"></div>
   <div class="wrap">
     <div class="hero-inner">
-      <div class="hero-rule"></div>
+      <p class="numero-hero"><span>Vote</span> 4001</p>
       <h1>Uma campanha feita pelo <em>coração</em>.</h1>
       <p class="lede">Cuidar das pessoas sempre fez parte da história de Samuel. Agora você também pode fazer parte dessa caminhada.</p>
       <div class="hero-cta">
@@ -290,7 +333,37 @@
   </div>
 </section>
 
-<!-- 2. CENTRAL DE ACOES -->
+<!-- 2. CRIE SUA FOTO -->
+<section id="minha-foto" class="sec-foto">
+  <div class="wrap">
+    <div class="foto-grid">
+      <div>
+        <p class="eyebrow">Comece por aqui</p>
+        <h2>Crie a sua foto com a campanha.</h2>
+        <p class="lede">Coloque a sua foto na moldura do Samuel e use como <strong>foto de perfil do WhatsApp</strong>, no Instagram ou nos <strong>stories</strong>. Leva menos de um minuto, direto do celular.</p>
+        <ol class="passos">
+          <li>Escolha uma foto sua</li>
+          <li>Ajuste o tamanho e a posição</li>
+          <li>Baixe e publique</li>
+        </ol>
+        <a class="btn btn-gold" id="link-moldura" href="#" target="_blank" rel="noopener">Criar minha foto agora</a>
+        <p class="aviso-form" style="margin-top:14px">Gratuito. Sua foto não sai do seu aparelho — tudo é feito no próprio navegador.</p>
+      </div>
+      <div class="foto-exemplos">
+        <figure>
+          <img src="../assets/exemplo-perfil.jpg" alt="Exemplo de foto de perfil com a moldura da campanha" loading="lazy">
+          <figcaption>Foto de perfil</figcaption>
+        </figure>
+        <figure>
+          <img src="../assets/exemplo-story.jpg" alt="Exemplo de story com a moldura da campanha" loading="lazy">
+          <figcaption>Story</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. CENTRAL DE ACOES -->
 <section id="acoes">
   <div class="wrap">
     <div class="sec-head">
@@ -299,10 +372,10 @@
     </div>
 
     <div class="acoes">
-      <a class="acao destaque" id="link-moldura" href="#" target="_blank" rel="noopener">
-        <h3>Criar minha foto com Samuel</h3>
-        <p>Coloque sua foto na campanha e mostre que você também caminha com Samuel.</p>
-        <span class="seta">Criar agora →</span>
+      <a class="acao destaque" id="link-grupo" href="#">
+        <h3>Grupo de quem apoia o Samuel</h3>
+        <p>Entre no grupo e acompanhe a campanha de perto, junto com quem também caminha com Samuel.</p>
+        <span class="seta">Entrar no grupo →</span>
       </a>
 
       <a class="acao" href="#amigos">
@@ -464,14 +537,23 @@
   <div class="wrap">
     <div class="bio">
       <div class="bio-foto">
-        <img src="../assets/samuel-hero.jpg" alt="Samuel Enfermeiro" loading="lazy">
+        <img src="../assets/samuel-retrato.jpg" alt="Samuel Enfermeiro" loading="lazy">
       </div>
       <div>
         <p class="eyebrow">Conheça Samuel</p>
         <h2 style="font-size:clamp(26px,4.6vw,40px);font-weight:800;color:var(--navy)">Enfermeiro por profissão.<br>Cuidar das pessoas por propósito.</h2>
-        <p class="lede">Samuel é enfermeiro de formação. Foi na enfermagem que construiu o jeito de trabalhar que carrega até hoje: escutar antes de agir, chegar perto e acompanhar de verdade quem precisa.</p>
+        <p class="lede">Enfermeiro de formação, Samuel construiu em Mauá um histórico de crescimento eleitoral constante. Foi eleito vereador pela primeira vez em 2016, com 2.443 votos, e reeleito em 2020, com 2.960. Em 2024 atingiu sua maior marca, 3.102 votos — resultado que o posicionou como a principal liderança do PSB na cidade.</p>
         <blockquote class="citacao">“A enfermagem me ensinou algo que nunca mais saiu de mim: antes de tentar resolver o problema de alguém, você precisa saber ouvir.”</blockquote>
-        <p class="lede">Mauá é o centro dessa história. É onde estão a família, as ruas e as pessoas que o conheceram muito antes de qualquer candidatura. Foi como vereador na cidade que a trajetória política começou, e na Secretaria de Proteção e Defesa das Pessoas com Deficiência que o trabalho se aproximou ainda mais das famílias.</p>
+        <p class="lede">No Legislativo, destacou-se pela aprovação de leis em áreas fundamentais:</p>
+        <ul class="lista-leis">
+          <li>Direitos das pessoas com Transtorno do Espectro Autista (TEA)</li>
+          <li>Valorização dos profissionais da Enfermagem</li>
+          <li>Proteção à mulher e ao idoso</li>
+          <li>Incentivo ao aleitamento materno e apoio a gestantes</li>
+          <li>Adoção de crianças e adolescentes</li>
+        </ul>
+        <p class="lede">Em março de 2025 assumiu a Secretaria de Proteção e Defesa das Pessoas com Deficiência de Mauá, onde aplicou a experiência parlamentar para estruturar políticas de acolhimento e garantir o acesso efetivo das pessoas com deficiência aos serviços municipais. A gestão foi marcada pela proximidade com as famílias e pelo fortalecimento da rede de proteção social.</p>
+        <p class="lede">Concluído esse ciclo em abril de 2026, Samuel coloca sua competência e seu olhar humano à disposição de um projeto maior: levar essa transformação para todo o Brasil.</p>
         <div class="causas">
           <span class="causa">Saúde</span>
           <span class="causa">Autismo</span>
@@ -512,6 +594,7 @@
   <div class="wrap">
     <div class="hero-rule"></div>
     <h2>Faça parte dessa caminhada.</h2>
+    <p style="font-family:Archivo,sans-serif;font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--gold);margin:18px 0 0">Experiência para cuidar. Coragem para representar.</p>
     <p class="lede on-dark" style="margin-top:20px">Toda campanha feita pelo coração precisa de gente por perto. Você pode participar do seu jeito: divulgando, ajudando no seu bairro ou simplesmente apresentando Samuel para alguém.</p>
     <div class="hero-cta">
       <a class="btn btn-gold" href="#amigos-form">Quero ser amigo do Samuel</a>
@@ -552,6 +635,9 @@
 
     // Link do aplicativo da moldura
     moldura: "../",
+
+    // Link de convite do grupo de WhatsApp dos apoiadores (https://chat.whatsapp.com/...)
+    grupoWhatsapp: "",
 
     // Texto copiado/compartilhado ao indicar Samuel
     convite: "Conheça o Samuel Enfermeiro, candidato a Deputado Federal 4001. Uma campanha feita pelo coração:",
@@ -805,6 +891,14 @@
   });
 
   document.getElementById("link-moldura").href = CONFIG.moldura;
+
+  var elGrupo = document.getElementById("link-grupo");
+  if (/^https:\/\/chat\.whatsapp\.com\//.test(CONFIG.grupoWhatsapp)) {
+    elGrupo.href = CONFIG.grupoWhatsapp;
+    elGrupo.target = "_blank"; elGrupo.rel = "noopener noreferrer";
+  } else {
+    elGrupo.addEventListener("click", function (e) { e.preventDefault(); toast("Link do grupo ainda não configurado."); });
+  }
 
   /* ===================== indicar: compartilhar ou copiar ===================== */
   document.getElementById("link-indicar").addEventListener("click", function (e) {
