@@ -74,7 +74,7 @@
   .hero{position:relative;background:var(--navy-deep);color:#fff;overflow:hidden}
   .hero-photo{
     position:absolute;inset:0;
-    background:url('../assets/samuel-hero.jpg') center 18% / cover no-repeat;
+    background:url('../assets/samuel-hero.jpg?v=2') center 18% / cover no-repeat;
     opacity:.66
   }
   .hero::after{
@@ -241,6 +241,37 @@
   .causa:nth-child(3n+2){background:var(--navy);color:#fff}
   .causa:nth-child(4n+3){border-color:var(--gold);background:var(--gold);color:var(--navy)}
 
+  /* ---------- leis ---------- */
+  .numeros{display:grid;gap:14px;grid-template-columns:1fr}
+  @media(min-width:560px){ .numeros{grid-template-columns:1fr 1fr} }
+  .numero{
+    border:1px solid rgba(255,255,255,.2);border-left:4px solid rgba(255,255,255,.35);
+    padding:26px 24px
+  }
+  .numero.destaque{border-left-color:var(--gold);background:rgba(255,199,44,.08)}
+  .numero strong{
+    display:block;font-family:Archivo,sans-serif;font-weight:900;
+    font-size:clamp(46px,11vw,68px);line-height:.95;color:#fff;letter-spacing:-.03em
+  }
+  .numero.destaque strong{color:var(--gold)}
+  .numero span{display:block;margin-top:8px;font-size:14.5px;color:#c3cbdf}
+  .areas{display:flex;flex-wrap:wrap;gap:9px}
+  .area{
+    font-family:Archivo,sans-serif;font-weight:700;font-size:13px;
+    padding:9px 15px;border:1.5px solid rgba(255,255,255,.3);color:#e7ecf7;border-radius:100px
+  }
+  .lei-destaque{
+    margin-top:44px;border-left:4px solid var(--gold);padding:24px 24px 26px;
+    background:rgba(255,255,255,.06)
+  }
+  .lei-destaque h3{font-size:21px;font-weight:800;color:#fff;margin-bottom:10px}
+  .lei-destaque p{margin:0 0 18px;font-size:15px;color:#c9d2e6;max-width:62ch}
+  .fonte-nota{
+    margin-top:26px;font-size:12.5px;color:#8f9ab5;border-top:1px solid rgba(255,255,255,.14);
+    padding-top:14px
+  }
+  .fonte-nota a{color:var(--gold)}
+
   /* ---------- informacao ---------- */
   .info-grid{display:grid;gap:12px;grid-template-columns:1fr}
   @media(min-width:700px){ .info-grid{grid-template-columns:1fr 1fr} }
@@ -303,12 +334,13 @@
 <header class="topbar">
   <div class="wrap">
     <a class="brand" href="#topo" aria-label="Samuel Enfermeiro, Deputado Federal">
-      <img src="../assets/logo-samuel.png" alt="Samuel Enfermeiro — Deputado Federal">
+      <img src="../assets/logo-samuel.png?v=2" alt="Samuel Enfermeiro — Deputado Federal">
     </a>
     <nav class="nav" aria-label="Principal">
       <a href="#minha-foto">Minha foto</a>
       <a href="#amigos">Amigos do Samuel</a>
       <a href="#conheca">Conheça</a>
+      <a href="#leis">Leis</a>
       <a href="#informacao">Informação</a>
     </nav>
     <a class="btn btn-gold btn-sm btn-top" href="#amigos-form">Participar</a>
@@ -351,11 +383,11 @@
       </div>
       <div class="foto-exemplos">
         <figure>
-          <img src="../assets/exemplo-perfil.jpg" alt="Exemplo de foto de perfil com a moldura da campanha" loading="lazy">
+          <img src="../assets/exemplo-perfil.jpg?v=2" alt="Exemplo de foto de perfil com a moldura da campanha" loading="lazy">
           <figcaption>Foto de perfil</figcaption>
         </figure>
         <figure>
-          <img src="../assets/exemplo-story.jpg" alt="Exemplo de story com a moldura da campanha" loading="lazy">
+          <img src="../assets/exemplo-story.jpg?v=2" alt="Exemplo de story com a moldura da campanha" loading="lazy">
           <figcaption>Story</figcaption>
         </figure>
       </div>
@@ -537,7 +569,7 @@
   <div class="wrap">
     <div class="bio">
       <div class="bio-foto">
-        <img src="../assets/samuel-retrato.jpg" alt="Samuel Enfermeiro" loading="lazy">
+        <img src="../assets/samuel-retrato.jpg?v=2" alt="Samuel Enfermeiro" loading="lazy">
       </div>
       <div>
         <p class="eyebrow">Conheça Samuel</p>
@@ -569,7 +601,52 @@
   </div>
 </section>
 
-<!-- 6. INFORMACAO QUE CUIDA -->
+<!-- 6. LEIS -->
+<section class="sec-navy" id="leis">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow on-dark">Mandato</p>
+      <h2>O que virou lei.</h2>
+      <p class="lede on-dark">No primeiro mandato como vereador de Mauá, Samuel foi um dos parlamentares mais atuantes da Casa.</p>
+    </div>
+
+    <div class="numeros">
+      <div class="numero">
+        <strong>139</strong>
+        <span>projetos de lei apresentados</span>
+      </div>
+      <div class="numero destaque">
+        <strong>66</strong>
+        <span>leis aprovadas</span>
+      </div>
+    </div>
+
+    <p class="eyebrow on-dark" style="margin:44px 0 16px">Áreas em que legislou</p>
+    <div class="areas">
+      <span class="area">Saúde e enfermagem</span>
+      <span class="area">Autismo</span>
+      <span class="area">Pessoa com deficiência</span>
+      <span class="area">Adoção de crianças e adolescentes</span>
+      <span class="area">Mulheres</span>
+      <span class="area">Idosos</span>
+      <span class="area">Gestantes e aleitamento materno</span>
+    </div>
+
+    <div class="lei-destaque">
+      <p class="eyebrow on-dark" style="margin-bottom:10px">Exemplo</p>
+      <h3>Lei nº 5.645, de 2020</h3>
+      <p>Proíbe a retenção de macas das ambulâncias do SAMU e de outras unidades móveis de urgência e emergência na rede hospitalar municipal de Mauá — para que a ambulância não fique parada esperando maca em vez de atender a próxima ocorrência.</p>
+      <a class="btn btn-ghost-light btn-sm" href="https://consulta.camaramaua.sp.gov.br/Documentos/Documento/579924" target="_blank" rel="noopener noreferrer">Ver a lei na Câmara ↗</a>
+    </div>
+
+    <p class="fonte-nota">
+      Dados do perfil oficial de Samuel Ferreira dos Santos na Câmara Municipal de Mauá.
+      <a href="https://www.camaramaua.sp.gov.br/Vereadores/Detalhes/68" target="_blank" rel="noopener noreferrer">Consultar a fonte ↗</a>
+    </p>
+  </div>
+</section>
+
+<!-- 7. INFORMACAO QUE CUIDA -->
 <section class="sec-mist" id="informacao">
   <div class="wrap">
     <div class="sec-head">
@@ -607,7 +684,7 @@
 
 <footer class="rodape">
   <div class="wrap">
-    <img src="../assets/logo-samuel.png" alt="Samuel Enfermeiro">
+    <img src="../assets/logo-samuel.png?v=2" alt="Samuel Enfermeiro">
     <div>
       <a href="https://www.instagram.com/samuelenfermeiro/" target="_blank" rel="noopener noreferrer">@samuelenfermeiro</a>
     </div>
