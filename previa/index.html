@@ -1,0 +1,929 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Samuel de Coração — A campanha feita pelo coração</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Uma campanha feita pelo coração. Participe, indique, receba Samuel no seu bairro e conheça direitos que podem ajudar a sua família.">
+<meta name="theme-color" content="#0d1b4c">
+<meta property="og:title" content="Samuel de Coração">
+<meta property="og:description" content="Uma campanha feita pelo coração. Faça parte dessa caminhada.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    --navy:#0d1b4c; --navy-2:#12245c; --navy-deep:#081335;
+    --gold:#ffc72c; --gold-ink:#8a6100;
+    --paper:#ffffff; --mist:#f3f5fa; --line:#e3e7f0;
+    --ink:#171a2b; --muted:#5c6479;
+    --wrap:1120px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:Inter,system-ui,sans-serif;font-size:16px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit}
+  .wrap{width:100%;max-width:var(--wrap);margin:0 auto;padding:0 20px}
+  h1,h2,h3{font-family:Archivo,Inter,sans-serif;margin:0;line-height:1.05;letter-spacing:-.02em}
+  .eyebrow{
+    font-family:Archivo,sans-serif;font-weight:800;font-size:12px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--gold-ink);margin:0 0 14px
+  }
+  .eyebrow.on-dark{color:var(--gold)}
+  .lede{font-size:17px;color:var(--muted);max-width:62ch;margin:16px 0 0}
+  .lede.on-dark{color:#c3cbdf}
+
+  /* ---------- topo ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);
+    backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--line)
+  }
+  .topbar .wrap{display:flex;align-items:center;gap:18px;height:64px}
+  .brand img{height:34px;width:auto}
+  .nav{display:none;margin-left:auto;gap:26px;font-size:14px;font-weight:600}
+  .nav a{text-decoration:none;color:var(--navy);opacity:.78}
+  .nav a:hover{opacity:1}
+  .btn-top{margin-left:auto}
+  @media(min-width:900px){ .nav{display:flex} .btn-top{margin-left:0} }
+
+  /* ---------- botoes ---------- */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    font-family:Archivo,sans-serif;font-weight:800;font-size:14px;letter-spacing:.04em;
+    text-transform:uppercase;text-decoration:none;cursor:pointer;
+    padding:15px 22px;border-radius:6px;border:2px solid transparent;transition:.15s
+  }
+  .btn-gold{background:var(--gold);color:var(--navy)}
+  .btn-gold:hover{background:#ffd451}
+  .btn-navy{background:var(--navy);color:#fff}
+  .btn-navy:hover{background:var(--navy-2)}
+  .btn-ghost{background:transparent;color:var(--navy);border-color:var(--navy)}
+  .btn-ghost:hover{background:var(--navy);color:#fff}
+  .btn-ghost-light{background:transparent;color:#fff;border-color:rgba(255,255,255,.55)}
+  .btn-ghost-light:hover{background:#fff;color:var(--navy)}
+  .btn-sm{padding:11px 16px;font-size:12.5px}
+  .btn-block{width:100%}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;background:var(--navy-deep);color:#fff;overflow:hidden}
+  .hero-photo{
+    position:absolute;inset:0;
+    background:url('../assets/samuel-hero.jpg') center 10% / cover no-repeat;
+    opacity:.66
+  }
+  .hero::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(8,19,53,.42) 0%,rgba(8,19,53,.7) 48%,rgba(8,19,53,.97) 100%)
+  }
+  @media(min-width:820px){
+    .hero-photo{left:auto;right:0;width:52%;opacity:1;background-position:center 8%}
+    .hero::after{background:linear-gradient(90deg,var(--navy-deep) 34%,rgba(8,19,53,.86) 52%,rgba(8,19,53,.15) 100%)}
+  }
+  .hero-inner{position:relative;z-index:2;padding:72px 0 62px}
+  @media(min-width:820px){ .hero-inner{padding:104px 0 96px;max-width:60%} }
+  .hero h1{
+    font-size:clamp(38px,8.6vw,68px);font-weight:900;color:#fff;text-wrap:balance
+  }
+  .hero h1 em{font-style:normal;color:var(--gold)}
+  .hero .lede{margin-top:20px;font-size:17px;color:#cfd6e8;max-width:46ch}
+  .hero-cta{display:flex;flex-direction:column;gap:12px;margin-top:32px}
+  @media(min-width:560px){ .hero-cta{flex-direction:row;flex-wrap:wrap} }
+  .hero-rule{width:64px;height:5px;background:var(--gold);margin-bottom:26px;border-radius:2px}
+
+  /* ---------- secoes ---------- */
+  section{padding:72px 0}
+  .sec-mist{background:var(--mist)}
+  .sec-navy{background:var(--navy);color:#fff}
+  .sec-head{max-width:44ch;margin-bottom:40px}
+  .sec-head h2{font-size:clamp(28px,5.4vw,44px);font-weight:800;color:var(--navy)}
+  .sec-navy .sec-head h2{color:#fff}
+
+  /* ---------- central de acoes ---------- */
+  .acoes{display:grid;gap:14px;grid-template-columns:1fr}
+  @media(min-width:640px){ .acoes{grid-template-columns:1fr 1fr} }
+  @media(min-width:960px){ .acoes{grid-template-columns:repeat(3,1fr)} }
+  .acao{
+    display:flex;flex-direction:column;gap:8px;text-decoration:none;
+    background:#fff;border:1px solid var(--line);border-left:4px solid var(--navy);
+    padding:24px 22px;transition:.15s
+  }
+  .acao:hover{border-left-color:var(--gold);transform:translateY(-2px);box-shadow:0 10px 26px rgba(13,27,76,.09)}
+  .acao.destaque{background:var(--navy);border-color:var(--navy);border-left-color:var(--gold);color:#fff}
+  .acao h3{font-size:19px;font-weight:800;color:var(--navy)}
+  .acao.destaque h3{color:#fff}
+  .acao p{margin:0;font-size:14.5px;color:var(--muted)}
+  .acao.destaque p{color:#c3cbdf}
+  .acao .seta{margin-top:6px;font-family:Archivo,sans-serif;font-weight:800;font-size:12.5px;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--gold-ink)}
+  .acao.destaque .seta{color:var(--gold)}
+  .acao-mini{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  .acao-mini .acao{padding:18px}
+
+  /* ---------- amigos ---------- */
+  .mosaico{display:grid;gap:10px;grid-template-columns:repeat(2,1fr)}
+  @media(min-width:700px){ .mosaico{grid-template-columns:repeat(4,1fr)} }
+  .amigo{position:relative;overflow:hidden;background:var(--navy-2);aspect-ratio:1}
+  .amigo img{width:100%;height:100%;object-fit:cover}
+  .amigo:nth-child(6n+1){grid-row:span 2;aspect-ratio:1/2}
+  @media(max-width:699px){ .amigo:nth-child(6n+1){grid-row:span 1;aspect-ratio:1} }
+  .amigo figcaption{
+    position:absolute;left:0;right:0;bottom:0;padding:14px 12px 10px;
+    background:linear-gradient(180deg,transparent,rgba(8,19,53,.82));
+    color:#fff;font-size:12.5px;font-weight:600;line-height:1.3
+  }
+  .amigo figcaption span{display:block;font-weight:400;opacity:.8;font-size:11.5px}
+  .vazio{
+    border:2px dashed rgba(255,255,255,.28);padding:36px 24px;text-align:center;
+    color:#c3cbdf;font-size:14.5px
+  }
+  .vazio code{
+    background:rgba(255,255,255,.1);padding:2px 7px;border-radius:4px;
+    font-size:13px;color:var(--gold)
+  }
+
+  /* ---------- formularios ---------- */
+  .form{background:#fff;border:1px solid var(--line);padding:26px 22px;max-width:620px}
+  .sec-navy .form{background:var(--navy-2);border-color:rgba(255,255,255,.16)}
+  .campo{margin-bottom:16px}
+  .campo label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:var(--navy)}
+  .sec-navy .campo label{color:#dfe5f2}
+  .campo input,.campo select,.campo textarea{
+    width:100%;font:inherit;font-size:16px;padding:13px 14px;border-radius:5px;
+    border:1.5px solid var(--line);background:#fff;color:var(--ink)
+  }
+  .campo input:focus,.campo select:focus,.campo textarea:focus{
+    outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(13,27,76,.1)
+  }
+  .campo textarea{min-height:96px;resize:vertical}
+  .dupla{display:grid;gap:0}
+  @media(min-width:520px){ .dupla{grid-template-columns:1fr 1fr;gap:0 14px} }
+  .checks{display:grid;gap:10px;margin:6px 0 18px}
+  .check{display:flex;align-items:flex-start;gap:10px;font-size:14.5px;cursor:pointer}
+  .sec-navy .check{color:#dfe5f2}
+  .check input{width:19px;height:19px;margin:2px 0 0;flex-shrink:0;accent-color:var(--gold)}
+  .aviso-form{
+    font-size:13px;color:var(--muted);margin-top:14px;line-height:1.5
+  }
+  .sec-navy .aviso-form{color:#9fa9c2}
+  .form-msg{
+    display:none;margin-top:14px;padding:12px 14px;border-radius:5px;font-size:14px;font-weight:600
+  }
+  .form-msg.erro{display:block;background:#fdecec;color:#9b1c1c;border:1px solid #f5c2c2}
+
+  /* ---------- conheca ---------- */
+  .bio{display:grid;gap:34px;align-items:start}
+  @media(min-width:860px){ .bio{grid-template-columns:.85fr 1.15fr;gap:56px} }
+  .bio-foto{position:relative}
+  .bio-foto img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:center 12%}
+  .bio-foto::after{
+    content:"";position:absolute;left:-14px;bottom:-14px;width:96px;height:96px;
+    border-left:6px solid var(--gold);border-bottom:6px solid var(--gold)
+  }
+  .citacao{
+    font-family:Archivo,sans-serif;font-weight:700;font-size:clamp(19px,3.2vw,25px);
+    line-height:1.3;color:var(--navy);border-left:5px solid var(--gold);
+    padding-left:20px;margin:26px 0
+  }
+  .causas{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}
+  .causa{
+    font-family:Archivo,sans-serif;font-weight:700;font-size:13px;letter-spacing:.03em;
+    padding:9px 15px;border:1.5px solid var(--navy);color:var(--navy);border-radius:100px
+  }
+  .causa:nth-child(3n+2){background:var(--navy);color:#fff}
+  .causa:nth-child(4n+3){border-color:var(--gold);background:var(--gold);color:var(--navy)}
+
+  /* ---------- informacao ---------- */
+  .info-grid{display:grid;gap:12px;grid-template-columns:1fr}
+  @media(min-width:700px){ .info-grid{grid-template-columns:1fr 1fr} }
+  details.info{background:#fff;border:1px solid var(--line);border-top:3px solid var(--navy)}
+  details.info[open]{border-top-color:var(--gold);box-shadow:0 8px 26px rgba(13,27,76,.08)}
+  details.info summary{
+    list-style:none;cursor:pointer;padding:22px 22px;display:block
+  }
+  details.info summary::-webkit-details-marker{display:none}
+  details.info summary h3{font-size:18px;font-weight:800;color:var(--navy);margin-bottom:5px}
+  details.info summary p{margin:0;font-size:14px;color:var(--muted)}
+  details.info summary .abrir{
+    display:inline-block;margin-top:11px;font-family:Archivo,sans-serif;font-weight:800;
+    font-size:12.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--gold-ink)
+  }
+  details.info[open] summary .abrir{color:var(--navy)}
+  .info-corpo{padding:0 22px 24px;border-top:1px solid var(--line);margin-top:4px;padding-top:20px}
+  .info-corpo h4{
+    font-family:Archivo,sans-serif;font-size:12px;font-weight:800;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--gold-ink);margin:20px 0 7px
+  }
+  .info-corpo h4:first-child{margin-top:0}
+  .info-corpo p{margin:0 0 10px;font-size:14.5px;color:#3a4055}
+  .info-corpo ul{margin:0 0 10px;padding-left:20px;font-size:14.5px;color:#3a4055}
+  .info-corpo li{margin-bottom:5px}
+  .info-acoes{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}
+  .verificado{
+    margin-top:16px;font-size:11.5px;color:#8b93a8;border-top:1px solid var(--line);padding-top:11px
+  }
+  .nota-legal{
+    margin-top:26px;font-size:12.5px;color:var(--muted);max-width:70ch;
+    border-left:3px solid var(--line);padding-left:14px
+  }
+
+  /* ---------- fechamento e rodape ---------- */
+  .fechamento{text-align:left}
+  .fechamento h2{font-size:clamp(30px,6vw,52px);color:#fff;font-weight:900;max-width:16ch}
+  .fechamento .hero-rule{margin-bottom:24px}
+  .rodape{background:var(--navy-deep);color:#8f9ab5;font-size:13px;padding:38px 0}
+  .rodape .wrap{display:grid;gap:18px}
+  .rodape img{height:44px;width:auto;opacity:.9;filter:brightness(0) invert(1)}
+  .rodape a{color:#c3cbdf}
+  .rodape .legal{font-size:12px;line-height:1.6;border-top:1px solid rgba(255,255,255,.12);padding-top:16px}
+
+  .toast{
+    position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(16px);
+    background:var(--navy);color:#fff;font-size:14px;font-weight:600;
+    padding:13px 22px;border-radius:100px;box-shadow:0 10px 30px rgba(0,0,0,.3);
+    opacity:0;pointer-events:none;transition:.24s;z-index:99
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .pular{position:absolute;left:-9999px}
+  .pular:focus{left:12px;top:12px;z-index:99;background:#fff;padding:10px 16px}
+</style>
+</head>
+<body>
+
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#topo" aria-label="Samuel Enfermeiro, Deputado Federal">
+      <img src="../assets/logo-samuel.png" alt="Samuel Enfermeiro — Deputado Federal">
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="#acoes">Participar</a>
+      <a href="#amigos">Amigos do Samuel</a>
+      <a href="#conheca">Conheça</a>
+      <a href="#informacao">Informação</a>
+    </nav>
+    <a class="btn btn-gold btn-sm btn-top" href="#amigos-form">Participar</a>
+  </div>
+</header>
+
+<main id="conteudo">
+
+<!-- 1. HERO -->
+<section class="hero" id="topo" style="padding:0">
+  <div class="hero-photo" role="img" aria-label="Samuel Enfermeiro"></div>
+  <div class="wrap">
+    <div class="hero-inner">
+      <div class="hero-rule"></div>
+      <h1>Uma campanha feita pelo <em>coração</em>.</h1>
+      <p class="lede">Cuidar das pessoas sempre fez parte da história de Samuel. Agora você também pode fazer parte dessa caminhada.</p>
+      <div class="hero-cta">
+        <a class="btn btn-gold" href="#amigos-form">Quero caminhar com Samuel</a>
+        <a class="btn btn-ghost-light" href="#conheca">Conhecer Samuel</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. CENTRAL DE ACOES -->
+<section id="acoes">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Participe</p>
+      <h2>Como você quer participar?</h2>
+    </div>
+
+    <div class="acoes">
+      <a class="acao destaque" id="link-moldura" href="#" target="_blank" rel="noopener">
+        <h3>Criar minha foto com Samuel</h3>
+        <p>Coloque sua foto na campanha e mostre que você também caminha com Samuel.</p>
+        <span class="seta">Criar agora →</span>
+      </a>
+
+      <a class="acao" href="#amigos">
+        <h3>Amigos do Samuel</h3>
+        <p>Entre para o grupo de pessoas que constroem essa caminhada por perto.</p>
+        <span class="seta">Fazer parte →</span>
+      </a>
+
+      <a class="acao" id="link-indicar" href="#">
+        <h3>Indicar Samuel</h3>
+        <p>Apresente Samuel para alguém da sua família ou para um amigo.</p>
+        <span class="seta">Indicar pelo WhatsApp →</span>
+      </a>
+
+      <a class="acao" href="#receber">
+        <h3>Quero receber o Samuel</h3>
+        <p>Convide Samuel para o seu bairro, comércio, associação ou um encontro com amigos.</p>
+        <span class="seta">Enviar convite →</span>
+      </a>
+
+      <a class="acao" href="https://www.instagram.com/samuelenfermeiro/" target="_blank" rel="noopener noreferrer">
+        <h3>Instagram</h3>
+        <p>Acompanhe o dia a dia da caminhada em @samuelenfermeiro.</p>
+        <span class="seta">Seguir →</span>
+      </a>
+
+      <a class="acao" id="link-whatsapp" href="#">
+        <h3>Falar com a equipe</h3>
+        <p>Fale direto pelo WhatsApp oficial da campanha.</p>
+        <span class="seta">Abrir WhatsApp →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 3. AMIGOS DO SAMUEL -->
+<section class="sec-navy" id="amigos">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow on-dark">Gente de verdade</p>
+      <h2>Amigos do Samuel</h2>
+      <p class="lede on-dark">Uma campanha construída por pessoas que acreditam que cuidar, ouvir e estar presente ainda fazem diferença.</p>
+    </div>
+
+    <div id="mosaico-amigos"></div>
+
+    <div style="margin-top:34px">
+      <a class="btn btn-gold" href="#amigos-form">Quero ser amigo do Samuel</a>
+    </div>
+
+    <div id="amigos-form" style="margin-top:40px">
+      <form class="form" data-form="amigos">
+        <div class="campo">
+          <label for="a-nome">Nome</label>
+          <input id="a-nome" name="Nome" type="text" required autocomplete="name">
+        </div>
+        <div class="dupla">
+          <div class="campo">
+            <label for="a-whats">WhatsApp</label>
+            <input id="a-whats" name="WhatsApp" type="tel" required autocomplete="tel" placeholder="(11) 90000-0000">
+          </div>
+          <div class="campo">
+            <label for="a-email">E-mail <span style="font-weight:400;color:#9fa9c2">(opcional)</span></label>
+            <input id="a-email" name="E-mail" type="email" autocomplete="email">
+          </div>
+        </div>
+        <div class="dupla">
+          <div class="campo">
+            <label for="a-cidade">Cidade</label>
+            <input id="a-cidade" name="Cidade" type="text" required>
+          </div>
+          <div class="campo">
+            <label for="a-bairro">Bairro</label>
+            <input id="a-bairro" name="Bairro" type="text" required>
+          </div>
+        </div>
+
+        <p style="font-size:13px;font-weight:600;color:#dfe5f2;margin:22px 0 4px">Como você quer participar?</p>
+        <div class="checks">
+          <label class="check"><input type="checkbox" name="Participação" value="Quero receber novidades"><span>Quero receber novidades</span></label>
+          <label class="check"><input type="checkbox" name="Participação" value="Quero divulgar Samuel"><span>Quero divulgar Samuel</span></label>
+          <label class="check"><input type="checkbox" name="Participação" value="Quero ajudar no meu bairro"><span>Quero ajudar no meu bairro</span></label>
+          <label class="check"><input type="checkbox" name="Participação" value="Quero receber materiais"><span>Quero receber materiais</span></label>
+          <label class="check"><input type="checkbox" name="Participação" value="Quero apresentar Samuel para outras pessoas"><span>Quero apresentar Samuel para outras pessoas</span></label>
+          <label class="check"><input type="checkbox" name="Participação" value="Quero receber Samuel no meu bairro"><span>Quero receber Samuel no meu bairro</span></label>
+        </div>
+
+        <button class="btn btn-gold btn-block" type="submit">Quero fazer parte</button>
+        <div class="form-msg" data-msg></div>
+        <p class="aviso-form">Seus dados são usados apenas para o contato da equipe da campanha. Não criamos conta nem senha.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- 4. QUERO RECEBER O SAMUEL -->
+<section class="sec-mist" id="receber">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Convite</p>
+      <h2>Samuel perto de você.</h2>
+      <p class="lede">Quer conversar com Samuel no seu bairro, comércio, entidade, associação, comunidade ou em um encontro com amigos e família? Envie seu convite.</p>
+    </div>
+
+    <form class="form" data-form="receber">
+      <div class="campo">
+        <label for="r-nome">Nome</label>
+        <input id="r-nome" name="Nome" type="text" required autocomplete="name">
+      </div>
+      <div class="dupla">
+        <div class="campo">
+          <label for="r-whats">WhatsApp</label>
+          <input id="r-whats" name="WhatsApp" type="tel" required autocomplete="tel" placeholder="(11) 90000-0000">
+        </div>
+        <div class="campo">
+          <label for="r-tipo">Tipo de local ou encontro</label>
+          <input id="r-tipo" name="Tipo de local" type="text" required placeholder="Bairro, comércio, associação…">
+        </div>
+      </div>
+      <div class="dupla">
+        <div class="campo">
+          <label for="r-cidade">Cidade</label>
+          <input id="r-cidade" name="Cidade" type="text" required>
+        </div>
+        <div class="campo">
+          <label for="r-bairro">Bairro</label>
+          <input id="r-bairro" name="Bairro" type="text" required>
+        </div>
+      </div>
+      <div class="dupla">
+        <div class="campo">
+          <label for="r-pessoas">Quantas pessoas, mais ou menos</label>
+          <input id="r-pessoas" name="Quantidade de pessoas" type="text" placeholder="Ex.: 20">
+        </div>
+        <div class="campo">
+          <label for="r-periodo">Melhor período</label>
+          <select id="r-periodo" name="Melhor período">
+            <option value="">Escolher…</option>
+            <option>Manhã</option>
+            <option>Tarde</option>
+            <option>Noite</option>
+            <option>Fim de semana</option>
+          </select>
+        </div>
+      </div>
+      <div class="campo">
+        <label for="r-msg">Mensagem</label>
+        <textarea id="r-msg" name="Mensagem" placeholder="Conte um pouco sobre o encontro."></textarea>
+      </div>
+      <button class="btn btn-navy btn-block" type="submit">Quero receber o Samuel</button>
+      <div class="form-msg" data-msg></div>
+      <p class="aviso-form">A equipe recebe o convite e entra em contato para combinar. Não há agenda automática.</p>
+    </form>
+  </div>
+</section>
+
+<!-- 5. CONHECA SAMUEL -->
+<section id="conheca">
+  <div class="wrap">
+    <div class="bio">
+      <div class="bio-foto">
+        <img src="../assets/samuel-hero.jpg" alt="Samuel Enfermeiro" loading="lazy">
+      </div>
+      <div>
+        <p class="eyebrow">Conheça Samuel</p>
+        <h2 style="font-size:clamp(26px,4.6vw,40px);font-weight:800;color:var(--navy)">Enfermeiro por profissão.<br>Cuidar das pessoas por propósito.</h2>
+        <p class="lede">Samuel é enfermeiro de formação. Foi na enfermagem que construiu o jeito de trabalhar que carrega até hoje: escutar antes de agir, chegar perto e acompanhar de verdade quem precisa.</p>
+        <blockquote class="citacao">“A enfermagem me ensinou algo que nunca mais saiu de mim: antes de tentar resolver o problema de alguém, você precisa saber ouvir.”</blockquote>
+        <p class="lede">Mauá é o centro dessa história. É onde estão a família, as ruas e as pessoas que o conheceram muito antes de qualquer candidatura. Foi como vereador na cidade que a trajetória política começou, e na Secretaria de Proteção e Defesa das Pessoas com Deficiência que o trabalho se aproximou ainda mais das famílias.</p>
+        <div class="causas">
+          <span class="causa">Saúde</span>
+          <span class="causa">Autismo</span>
+          <span class="causa">Pessoa com deficiência</span>
+          <span class="causa">Idosos</span>
+          <span class="causa">Família</span>
+          <span class="causa">Crianças</span>
+          <span class="causa">Saúde da mulher</span>
+          <span class="causa">Inclusão</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. INFORMACAO QUE CUIDA -->
+<section class="sec-mist" id="informacao">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Direitos</p>
+      <h2>Informação também é uma forma de cuidar.</h2>
+      <p class="lede">Conhecer seus direitos pode mudar uma história. Reunimos informações importantes para ajudar você e sua família a saber onde procurar orientação e como acessar serviços e benefícios.</p>
+      <p style="font-size:12.5px;color:var(--muted);margin-top:14px">Conteúdo informativo. A concessão de benefícios e serviços depende dos critérios e da análise dos órgãos públicos responsáveis.</p>
+    </div>
+
+    <div class="info-grid" id="info-grid"></div>
+
+    <p class="nota-legal">
+      As informações desta seção resumem o que está publicado nas fontes oficiais indicadas em cada assunto e podem mudar.
+      Antes de tomar qualquer decisão, consulte o órgão responsável pelo botão <strong>Consultar fonte oficial</strong>.
+      A campanha não concede, intermedeia nem garante benefícios públicos.
+    </p>
+  </div>
+</section>
+
+<!-- FECHAMENTO -->
+<section class="sec-navy fechamento">
+  <div class="wrap">
+    <div class="hero-rule"></div>
+    <h2>Faça parte dessa caminhada.</h2>
+    <p class="lede on-dark" style="margin-top:20px">Toda campanha feita pelo coração precisa de gente por perto. Você pode participar do seu jeito: divulgando, ajudando no seu bairro ou simplesmente apresentando Samuel para alguém.</p>
+    <div class="hero-cta">
+      <a class="btn btn-gold" href="#amigos-form">Quero ser amigo do Samuel</a>
+      <a class="btn btn-ghost-light" id="link-whatsapp-2" href="#">Falar com a equipe</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="rodape">
+  <div class="wrap">
+    <img src="../assets/logo-samuel.png" alt="Samuel Enfermeiro">
+    <div>
+      <a href="https://www.instagram.com/samuelenfermeiro/" target="_blank" rel="noopener noreferrer">@samuelenfermeiro</a>
+    </div>
+    <div class="legal" id="rodape-legal"></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* =====================================================================
+     CONFIGURAÇÃO — preencher antes de publicar
+     ===================================================================== */
+  var CONFIG = {
+    // E-mail que recebe os formulários (FormSubmit). Enquanto vazio, os
+    // formulários avisam que ainda não estão configurados em vez de falhar.
+    emailFormulario: "",
+
+    // WhatsApp oficial da campanha, só números, com DDI e DDD. Ex.: "5511999999999"
+    whatsapp: "",
+    whatsappMensagem: "Olá! Vim pelo site do Samuel Enfermeiro e quero falar com a equipe.",
+
+    // Link do aplicativo da moldura
+    moldura: "../",
+
+    // Texto copiado/compartilhado ao indicar Samuel
+    convite: "Conheça o Samuel Enfermeiro, candidato a Deputado Federal 4001. Uma campanha feita pelo coração:",
+
+    // Identificação eleitoral obrigatória
+    cnpj: "68.437.765/0001-27",
+    partido: "PSB"
+  };
+
+  /* =====================================================================
+     AMIGOS DO SAMUEL
+     Para adicionar alguém: coloque a foto em /amigos/ e acrescente uma
+     linha aqui. Nome e bairro são opcionais.
+     ===================================================================== */
+  var amigos = [
+    // { foto: "../amigos/maria.jpg", nome: "Maria",  bairro: "Jardim Zaíra" },
+    // { foto: "../amigos/joao.jpg",  nome: "João",   bairro: "Falque" },
+  ];
+
+  /* =====================================================================
+     INFORMAÇÃO QUE CUIDA
+     Conteúdo resumido das fontes oficiais. Revisar periodicamente e
+     atualizar "verificadoEm".
+     ===================================================================== */
+  var informationCards = [
+    {
+      id: "bpc",
+      titulo: "BPC/LOAS",
+      subtitulo: "Benefício de Prestação Continuada",
+      resumo: "Um salário mínimo mensal para quem preenche os requisitos.",
+      chamada: "Entender",
+      oQueE: [
+        "O BPC é o Benefício de Prestação Continuada previsto na Lei Orgânica da Assistência Social — LOAS.",
+        "É um benefício assistencial destinado à pessoa idosa ou à pessoa com deficiência que cumpra os requisitos previstos na legislação. Para quem se enquadra nos critérios, garante o pagamento mensal de um salário mínimo.",
+        "Não é necessário ter contribuído antes para o INSS."
+      ],
+      quemPode: [
+        "Não basta ter um diagnóstico. São analisados os requisitos legais relativos à deficiência e à situação socioeconômica da família.",
+        "A legislação considera a existência de impedimento de longo prazo e sua interação com barreiras que possam dificultar a participação plena da pessoa na sociedade.",
+        "O serviço oficial informa renda familiar por pessoa de até 1/4 do salário mínimo, além dos demais critérios.",
+        "O grupo familiar deve ter o Cadastro Único atualizado conforme as regras vigentes."
+      ],
+      direitos: [
+        "Não é aposentadoria.",
+        "Não paga 13º salário.",
+        "Não gera pensão por morte."
+      ],
+      comoFazer: [
+        "O pedido é feito pelo Meu INSS, no aplicativo ou no site, com login gov.br.",
+        "Em caso de dúvida, o INSS atende pelo telefone 135."
+      ],
+      fontes: [
+        { rotulo: "Solicitar no site oficial", url: "https://www.gov.br/pt-br/servicos/solicitar-beneficio-assistencial-a-pessoa-com-deficiencia" },
+        { rotulo: "Consultar fonte oficial", url: "https://www.gov.br/inss/pt-br/direitos-e-deveres/beneficios-assistenciais/beneficio-assistencial-a-pessoa-com-deficiencia-bpc-loas" }
+      ],
+      verificadoEm: "24/08/2026"
+    },
+    {
+      id: "pcd",
+      titulo: "Pessoa com Deficiência",
+      subtitulo: "Lei Brasileira de Inclusão",
+      resumo: "Saúde, educação, acessibilidade, trabalho e inclusão.",
+      chamada: "Ver direitos",
+      oQueE: [
+        "A Lei Brasileira de Inclusão — Estatuto da Pessoa com Deficiência (Lei nº 13.146/2015) reúne direitos voltados à igualdade de condições e à inclusão social.",
+        "Ela se baseia na Convenção sobre os Direitos das Pessoas com Deficiência, incorporada ao ordenamento brasileiro."
+      ],
+      quemPode: [
+        "Pessoas com deficiência, nos termos definidos pela legislação."
+      ],
+      direitos: [
+        "<strong>Atendimento prioritário</strong> nas situações previstas em lei.",
+        "<strong>Saúde:</strong> atenção integral e acesso aos serviços do SUS em igualdade de condições.",
+        "<strong>Educação inclusiva</strong> e os recursos necessários para acesso, permanência, participação e aprendizagem.",
+        "<strong>Escolas particulares</strong> também devem cumprir as obrigações de inclusão e não podem cobrar valores adicionais para cumprir determinadas medidas previstas na lei.",
+        "<strong>Acessibilidade:</strong> eliminação de barreiras e recursos que possibilitem participação e autonomia.",
+        "<strong>Trabalho:</strong> oportunidades em ambientes acessíveis e inclusivos, sem discriminação.",
+        "<strong>Transporte:</strong> direitos específicos de acessibilidade e, em certas situações, benefícios de transporte."
+      ],
+      comoFazer: [
+        "Para orientação local, procure o CRAS ou o órgão municipal da pessoa com deficiência.",
+        "O texto completo da lei está disponível no site do Planalto."
+      ],
+      fontes: [
+        { rotulo: "Consultar lei oficial", url: "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13146.htm" }
+      ],
+      verificadoEm: "24/08/2026"
+    },
+    {
+      id: "autismo",
+      titulo: "Criança com autismo",
+      subtitulo: "Autismo também é uma questão de direitos",
+      resumo: "Saúde, educação, inclusão e outros direitos.",
+      chamada: "Conhecer",
+      oQueE: [
+        "A Lei nº 12.764/2012 instituiu a Política Nacional de Proteção dos Direitos da Pessoa com Transtorno do Espectro Autista.",
+        "Ela estabelece que a pessoa com TEA é considerada pessoa com deficiência para todos os efeitos legais."
+      ],
+      quemPode: [
+        "Pessoas com diagnóstico de Transtorno do Espectro Autista e suas famílias."
+      ],
+      direitos: [
+        "<strong>Saúde:</strong> entre os direitos previstos estão o diagnóstico precoce, o atendimento multiprofissional, as informações para diagnóstico e tratamento, os medicamentos conforme as regras aplicáveis e a atenção às necessidades de saúde.",
+        "<strong>Educação:</strong> a criança com TEA tem direito ao acesso à educação. Em casos de comprovada necessidade, a legislação prevê acompanhante especializado para a pessoa com TEA incluída em classe comum do ensino regular.",
+        "<strong>Inclusão:</strong> como pessoa com deficiência, também é protegida pela Lei Brasileira de Inclusão.",
+        "<strong>Atendimento prioritário</strong> conforme as regras previstas na legislação.",
+        "<strong>BPC:</strong> uma criança com autismo pode eventualmente preencher os requisitos, porque a pessoa com TEA é considerada pessoa com deficiência para efeitos legais. O diagnóstico sozinho não significa concessão automática — é preciso preencher os critérios legais e passar pela análise."
+      ],
+      comoFazer: [
+        "Procure a rede de saúde do município para diagnóstico e acompanhamento.",
+        "Para o BPC, veja o assunto correspondente nesta mesma seção."
+      ],
+      fontes: [
+        { rotulo: "Consultar lei oficial", url: "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12764.htm" },
+        { rotulo: "Entender o BPC", url: "#bpc", interno: true }
+      ],
+      verificadoEm: "24/08/2026"
+    },
+    {
+      id: "ciptea",
+      titulo: "CIPTEA",
+      subtitulo: "Carteira de Identificação da Pessoa com Autismo",
+      resumo: "Saiba como solicitar a carteira da pessoa com autismo.",
+      chamada: "Solicitar",
+      oQueE: [
+        "A Carteira de Identificação da Pessoa com Transtorno do Espectro Autista é um documento criado para facilitar a identificação da pessoa com TEA e o acesso aos direitos relacionados ao atendimento prioritário.",
+        "Foi instituída pela Lei nº 13.977/2020, que alterou a Lei nº 12.764/2012."
+      ],
+      quemPode: [
+        "Pessoas com diagnóstico de TEA. Para a emissão é necessário laudo médico com o código da CID indicando o espectro autista, além dos documentos pessoais do beneficiário e do responsável."
+      ],
+      direitos: [
+        "Ajuda na identificação da pessoa com TEA e no reconhecimento da prioridade em serviços públicos e privados, especialmente em saúde, educação e assistência social."
+      ],
+      comoFazer: [
+        "No Estado de São Paulo, o pedido é feito pelo portal oficial ciptea.sp.gov.br ou presencialmente nas unidades do Poupatempo.",
+        "O serviço é gratuito."
+      ],
+      fontes: [
+        { rotulo: "Solicitar CIPTEA (SP)", url: "https://ciptea.sp.gov.br/" },
+        { rotulo: "Conhecer a lei", url: "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2020/lei/l13977.htm" }
+      ],
+      verificadoEm: "24/08/2026"
+    },
+    {
+      id: "tdah",
+      titulo: "TDAH",
+      subtitulo: "Direitos e acompanhamento escolar",
+      resumo: "Conheça os direitos relacionados ao acompanhamento escolar.",
+      chamada: "Saiba mais",
+      oQueE: [
+        "A Lei nº 14.254/2021 trata do acompanhamento integral para educandos com dislexia, Transtorno do Déficit de Atenção com Hiperatividade — TDAH ou outro transtorno de aprendizagem.",
+        "O acompanhamento se dá no âmbito da educação básica."
+      ],
+      quemPode: [
+        "Estudantes com TDAH, dislexia ou outros transtornos de aprendizagem contemplados pela legislação."
+      ],
+      direitos: [
+        "<strong>Identificação precoce</strong> de sinais que possam indicar dificuldades relacionadas ao transtorno.",
+        "<strong>Encaminhamento</strong> para avaliação e diagnóstico quando necessário.",
+        "<strong>Apoio educacional:</strong> acompanhamento das necessidades relacionadas à aprendizagem dentro da rede de ensino.",
+        "<strong>Saúde:</strong> possibilidade de apoio terapêutico especializado pela rede de saúde quando houver indicação.",
+        "<strong>Acompanhamento escolar</strong> específico direcionado às dificuldades apresentadas.",
+        "<strong>Capacitação:</strong> os sistemas de ensino devem disponibilizar aos professores informações e formação relacionadas à identificação e ao acompanhamento desses estudantes."
+      ],
+      comoFazer: [
+        "Converse com a direção da escola e com a secretaria de educação do município sobre o acompanhamento previsto na lei.",
+        "O TDAH não recebe automaticamente os mesmos direitos específicos previstos para pessoas com TEA. Consulte a lei para saber exatamente o que está garantido."
+      ],
+      fontes: [
+        { rotulo: "Consultar a lei oficial", url: "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14254.htm" }
+      ],
+      verificadoEm: "24/08/2026"
+    },
+    {
+      id: "passe-livre",
+      titulo: "Passe Livre",
+      subtitulo: "Transporte interestadual",
+      resumo: "Veja quem pode ter gratuidade em viagens interestaduais.",
+      chamada: "Consultar",
+      oQueE: [
+        "O Passe Livre Interestadual é a gratuidade no transporte coletivo interestadual de passageiros concedida à pessoa com deficiência comprovadamente carente.",
+        "Não se confunde com gratuidades municipais ou intermunicipais, que seguem regras próprias."
+      ],
+      quemPode: [
+        "É preciso comprovar, ao mesmo tempo, a condição de pessoa com deficiência e a hipossuficiência financeira — o serviço oficial informa renda familiar por pessoa de até 1 salário mínimo.",
+        "O atendimento aos critérios pode se dar por ser beneficiário do BPC, por estar inscrito no CadÚnico e constar no Cadastro-Inclusão, ou por inserir o atesto de pessoa com deficiência feito por médico no portal do Passe Livre."
+      ],
+      direitos: [
+        "Gratuidade nas modalidades de transporte interestadual previstas na regulamentação.",
+        "Há situações em que pode ser reconhecida a necessidade de acompanhante, conforme as regras do programa."
+      ],
+      comoFazer: [
+        "O pedido é feito pelo serviço oficial no gov.br ou pelo portal passelivre.antt.gov.br.",
+        "Pedidos on-line têm resposta imediata; pedidos enviados fisicamente têm prazo de análise."
+      ],
+      fontes: [
+        { rotulo: "Solicitar Passe Livre", url: "https://www.gov.br/pt-br/servicos/obter-passe-livre-interestadual-digital" }
+      ],
+      verificadoEm: "24/08/2026"
+    },
+    {
+      id: "auxilio-inclusao",
+      titulo: "Auxílio-Inclusão",
+      subtitulo: "Trabalho e inclusão",
+      resumo: "Para quem recebe ou recebeu BPC e passou a trabalhar.",
+      chamada: "Entender",
+      oQueE: [
+        "É um benefício voltado a determinadas pessoas com deficiência que recebem ou receberam o BPC e ingressam no mercado de trabalho, desde que atendam aos requisitos.",
+        "O serviço oficial informa valor de meio salário mínimo para quem se enquadra nas condições do programa, observado o limite de remuneração estabelecido pela legislação."
+      ],
+      quemPode: [
+        "Pessoas com deficiência que recebam o BPC e passem a trabalhar.",
+        "Ou que tenham tido o BPC suspenso ou cessado em determinadas condições relacionadas ao trabalho.",
+        "Em ambos os casos, é preciso preencher os demais requisitos previstos."
+      ],
+      direitos: [
+        "Começou a trabalhar e recebia BPC? Veja se você atende aos requisitos do Auxílio-Inclusão."
+      ],
+      comoFazer: [
+        "O pedido é feito pelo gov.br / Meu INSS, com login gov.br."
+      ],
+      fontes: [
+        { rotulo: "Solicitar no gov.br", url: "https://www.gov.br/pt-br/servicos/solicitar-auxilio-inclusao-a-pessoa-com-deficiencia" }
+      ],
+      verificadoEm: "24/08/2026"
+    }
+  ];
+
+  /* ===================== utilidades ===================== */
+  var toastEl = document.getElementById("toast"), toastT = null;
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastT);
+    toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 2600);
+  }
+  function esc(s) { return String(s).replace(/[<>&]/g, function (c) { return { "<": "&lt;", ">": "&gt;", "&": "&amp;" }[c]; }); }
+
+  /* ===================== links de WhatsApp ===================== */
+  var temWhats = /^\d{12,13}$/.test(CONFIG.whatsapp);
+  var urlWhats = temWhats
+    ? "https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(CONFIG.whatsappMensagem)
+    : null;
+
+  ["link-whatsapp", "link-whatsapp-2"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (urlWhats) { el.href = urlWhats; el.target = "_blank"; el.rel = "noopener noreferrer"; }
+    else el.addEventListener("click", function (e) { e.preventDefault(); toast("WhatsApp ainda não configurado."); });
+  });
+
+  document.getElementById("link-moldura").href = CONFIG.moldura;
+
+  /* ===================== indicar: compartilhar ou copiar ===================== */
+  document.getElementById("link-indicar").addEventListener("click", function (e) {
+    e.preventDefault();
+    var texto = CONFIG.convite + " " + location.href;
+    if (temWhats || /Android|iPhone|iPad/i.test(navigator.userAgent)) {
+      window.open("https://wa.me/?text=" + encodeURIComponent(texto), "_blank", "noopener");
+      return;
+    }
+    if (navigator.share) {
+      navigator.share({ title: "Samuel Enfermeiro", text: CONFIG.convite, url: location.href }).catch(function () {});
+      return;
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).then(function () { toast("Link copiado!"); })
+        .catch(function () { toast("Não foi possível copiar."); });
+    }
+  });
+
+  /* ===================== amigos ===================== */
+  (function () {
+    var alvo = document.getElementById("mosaico-amigos");
+    if (!amigos.length) {
+      alvo.innerHTML =
+        '<div class="vazio">As fotos dos amigos do Samuel aparecem aqui.<br>' +
+        'Coloque as imagens na pasta <code>/amigos/</code> e acrescente uma linha na lista <code>amigos</code>.</div>';
+      return;
+    }
+    var html = '<div class="mosaico">';
+    amigos.forEach(function (a) {
+      html += '<figure class="amigo"><img src="' + esc(a.foto) + '" alt="' + esc(a.nome || "Apoiador de Samuel") + '" loading="lazy">';
+      if (a.nome || a.bairro) {
+        html += '<figcaption>' + esc(a.nome || "") +
+                (a.bairro ? '<span>' + esc(a.bairro) + '</span>' : '') + '</figcaption>';
+      }
+      html += '</figure>';
+    });
+    alvo.innerHTML = html + '</div>';
+  })();
+
+  /* ===================== informação que cuida ===================== */
+  (function () {
+    var grid = document.getElementById("info-grid");
+    var html = "";
+    informationCards.forEach(function (c) {
+      html += '<details class="info" id="' + c.id + '"><summary><h3>' + esc(c.titulo) + '</h3>' +
+              '<p>' + esc(c.resumo) + '</p><span class="abrir">' + esc(c.chamada) + ' →</span></summary>' +
+              '<div class="info-corpo">';
+      html += '<h4>O que é</h4>' + c.oQueE.map(function (p) { return "<p>" + p + "</p>"; }).join("");
+      html += '<h4>Quem pode ter direito</h4>' + c.quemPode.map(function (p) { return "<p>" + p + "</p>"; }).join("");
+      if (c.direitos && c.direitos.length) {
+        html += '<h4>Principais pontos</h4><ul>' + c.direitos.map(function (p) { return "<li>" + p + "</li>"; }).join("") + "</ul>";
+      }
+      html += '<h4>Como solicitar ou procurar ajuda</h4>' + c.comoFazer.map(function (p) { return "<p>" + p + "</p>"; }).join("");
+      html += '<div class="info-acoes">';
+      c.fontes.forEach(function (f, i) {
+        if (f.interno) {
+          html += '<a class="btn btn-ghost btn-sm" href="' + f.url + '" data-abrir="' + f.url.slice(1) + '">' + esc(f.rotulo) + '</a>';
+        } else {
+          html += '<a class="btn ' + (i === 0 ? "btn-navy" : "btn-ghost") + ' btn-sm" href="' + f.url +
+                  '" target="_blank" rel="noopener noreferrer">' + esc(f.rotulo) + ' ↗</a>';
+        }
+      });
+      html += '</div><p class="verificado">Última verificação da informação: ' + esc(c.verificadoEm) +
+              ' · Fonte oficial indicada acima.</p></div></details>';
+    });
+    grid.innerHTML = html;
+
+    grid.addEventListener("click", function (e) {
+      var link = e.target.closest("[data-abrir]");
+      if (!link) return;
+      e.preventDefault();
+      var alvo = document.getElementById(link.getAttribute("data-abrir"));
+      if (alvo) { alvo.open = true; alvo.scrollIntoView({ behavior: "smooth", block: "center" }); }
+    });
+  })();
+
+  /* ===================== formulários ===================== */
+  document.querySelectorAll("form[data-form]").forEach(function (form) {
+    var msg = form.querySelector("[data-msg]");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!CONFIG.emailFormulario) {
+        msg.className = "form-msg erro";
+        msg.textContent = "Formulário ainda não configurado. Falta cadastrar o e-mail que vai receber os contatos.";
+        return;
+      }
+      var btn = form.querySelector('button[type="submit"]');
+      var textoOriginal = btn.textContent;
+      btn.disabled = true; btn.textContent = "Enviando…";
+
+      var dados = new FormData(form);
+      dados.append("_subject", "Site Samuel — " + form.getAttribute("data-form"));
+      dados.append("_captcha", "false");
+
+      fetch("https://formsubmit.co/ajax/" + CONFIG.emailFormulario, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: dados
+      }).then(function (r) {
+        if (!r.ok) throw new Error("falhou");
+        form.reset();
+        msg.className = "form-msg";
+        toast("Recebemos! A equipe entra em contato.");
+      }).catch(function () {
+        msg.className = "form-msg erro";
+        msg.textContent = "Não foi possível enviar agora. Tente novamente em instantes.";
+      }).then(function () {
+        btn.disabled = false; btn.textContent = textoOriginal;
+      });
+    });
+  });
+
+  /* ===================== rodapé eleitoral ===================== */
+  document.getElementById("rodape-legal").innerHTML =
+    "Propaganda eleitoral · CNPJ do candidato: " + esc(CONFIG.cnpj) +
+    (CONFIG.partido ? " · " + esc(CONFIG.partido) : "") +
+    "<br>Conteúdo informativo. Benefícios, critérios e serviços são definidos pelos órgãos públicos responsáveis.";
+})();
+</script>
+</body>
+</html>

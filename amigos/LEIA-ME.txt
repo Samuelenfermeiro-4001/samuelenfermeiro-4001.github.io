@@ -1,0 +1,18 @@
+AMIGOS DO SAMUEL — como adicionar fotos
+
+1. Coloque a foto nesta pasta. Use nomes simples, sem acento e sem espaço:
+   maria.jpg, joao.jpg, dona-cida.jpg
+
+2. Abra previa/index.html e procure a lista "amigos".
+   Acrescente uma linha por pessoa:
+
+   { foto: "../amigos/maria.jpg", nome: "Maria", bairro: "Jardim Zaira" },
+
+   Nome e bairro são opcionais — pode deixar só a foto:
+
+   { foto: "../amigos/maria.jpg" },
+
+3. Pronto. A seção monta o mosaico sozinha.
+
+Dica: fotos quadradas (ou perto disso) ficam melhores.
+Use imagens de até ~1000px de largura para o site não ficar pesado.
