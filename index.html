@@ -560,8 +560,10 @@
 
     // lockup recortado da propria arte, maior e sobreposto a foto
     if (frameReady) {
-      var lw = 680, lh = lw * LOCKUP_H / CANVAS_W;
-      var lx = cx - lw / 2, ly = 950 - lh;
+      // Maior largura que ainda cabe DENTRO do circulo da foto (R=500), com 20px
+      // de margem para nao atravessar o aro dourado.
+      var lw = 630, lh = lw * LOCKUP_H / CANVAS_W;
+      var lx = cx - lw / 2, ly = 838 - lh;
       var raio = 22;
       pctx.save();
       pctx.shadowColor = 'rgba(0,0,0,0.45)';
