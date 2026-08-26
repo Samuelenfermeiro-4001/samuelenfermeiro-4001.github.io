@@ -400,10 +400,12 @@
     x.drawImage(moldura.img, 0, 0, W, H);
     var dados = x.getImageData(0, 0, W, H);
     var d = dados.data;
+    // A foto ocupa exatamente o inverso da moldura, inclusive na borda suave.
+    // Corte duro aqui deixaria um vão claro em volta do candidato.
     for (var i = 0; i < d.length; i += 4) {
-      var vazado = d[i + 3] < 24;
+      var a = d[i + 3];
       d[i] = 255; d[i + 1] = 255; d[i + 2] = 255;
-      d[i + 3] = vazado ? 255 : 0;
+      d[i + 3] = 255 - a;
     }
     x.putImageData(dados, 0, 0);
     moldura.mascara = c;
@@ -437,26 +439,30 @@
     offsetY = Math.min(maxY, Math.max(-maxY, offsetY));
   }
 
+  var palco = document.createElement('canvas');
+  palco.width = CANVAS_W; palco.height = CANVAS_H;
+  var pctx = palco.getContext('2d');
+
   function render() {
-    ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
-    ctx.save();
-    ctx.beginPath();
     var h = molduraStory();
-    ctx.ellipse(h.cx, h.cy, h.rx, h.ry, 0, 0, Math.PI * 2);
-    ctx.clip();
-    ctx.fillStyle = '#dfe3ea';
-    ctx.fillRect(h.cx - h.rx, h.cy - h.ry, h.rx * 2, h.ry * 2);
+    ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+
+    pctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+    pctx.fillStyle = '#dfe3ea';
+    pctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
     if (photo) {
       var scale = baseScale * zoom;
       var drawW = naturalW * scale, drawH = naturalH * scale;
-      var dx = h.cx + offsetX - drawW / 2;
-      var dy = h.cy + offsetY - drawH / 2;
-      ctx.drawImage(photo, dx, dy, drawW, drawH);
+      pctx.drawImage(photo, h.cx + offsetX - drawW / 2, h.cy + offsetY - drawH / 2, drawW, drawH);
     }
-    ctx.restore();
     if (h.pronta) {
-      ctx.drawImage(h.img, 0, 0, CANVAS_W, CANVAS_H);
+      pctx.globalCompositeOperation = 'destination-in';
+      pctx.drawImage(mascaraDe(h, CANVAS_W, CANVAS_H), 0, 0);
+      pctx.globalCompositeOperation = 'source-over';
     }
+
+    ctx.drawImage(palco, 0, 0);
+    if (h.pronta) ctx.drawImage(h.img, 0, 0, CANVAS_W, CANVAS_H);
   }
 
   function loadPhoto(file) {
