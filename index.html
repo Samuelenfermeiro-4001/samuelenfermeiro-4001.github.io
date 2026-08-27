@@ -405,8 +405,12 @@
     var h = atual();
     if (canvas.width !== h.W || canvas.height !== h.H) {
       canvas.width = h.W; canvas.height = h.H;
-      palco.width = h.W; palco.height = h.H;
       stage.style.aspectRatio = h.W + ' / ' + h.H;
+    }
+    // O palco precisa acompanhar sempre, e nao so quando o canvas muda de
+    // tamanho: na abertura os dois ja coincidem e ele ficaria em 300x150.
+    if (palco.width !== h.W || palco.height !== h.H) {
+      palco.width = h.W; palco.height = h.H;
     }
     ctx.clearRect(0, 0, h.W, h.H);
 
