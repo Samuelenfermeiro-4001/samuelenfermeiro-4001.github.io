@@ -250,7 +250,7 @@
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6"/>
     </svg>
-    <input type="range" id="zoom" min="100" max="260" value="100" disabled>
+    <input type="range" id="zoom" min="100" max="260" value="110" disabled>
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/>
     </svg>
@@ -471,7 +471,8 @@
       clampOffsets();
       autoOffsetY = offsetY;
       zoomInput.disabled = false;
-      zoomInput.value = 100;
+      zoomInput.value = 110;
+      zoom = 1.10;
       hintOverlay.style.display = 'none';
       stage.classList.add('has-photo');
       downloadBtn.disabled = false;
