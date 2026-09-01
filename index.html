@@ -340,11 +340,16 @@
       arquivo: "samuel-enfermeiro-story.png", src: "assets/molduras/story-azul.webp" }
   ];
   var selecionado = 0;
+  // O GitHub Pages manda o navegador guardar as artes por 10 minutos. Como o
+  // nome do arquivo nao muda, uma moldura corrigida podia demorar a aparecer.
+  // A versao abaixo e o resumo do conteudo das artes: muda quando elas mudam,
+  // e o navegador busca a nova na hora.
+  var VERSAO = 'f0f39552';
   MOLDURAS.forEach(function (m) {
     m.img = new Image();
     m.pronta = false;
     m.img.onload = function () { m.pronta = true; render(); };
-    m.img.src = m.src;
+    m.img.src = m.src + '?v=' + VERSAO;
   });
   function atual() { return MOLDURAS[selecionado]; }
   function molduraStory() { return atual(); }
