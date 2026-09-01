@@ -10,7 +10,7 @@ Rodar sempre que trocar alguma moldura:  python3 ferramentas/versionar.py
 import hashlib, io, os, re, sys
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ARTES = ["assets/molduras/perfil-1x1.webp", "assets/molduras/story-azul.webp"]
+ARTES = ["assets/molduras/perfil-1x1.webp", "assets/molduras/post-45.webp"]
 
 h = hashlib.sha1()
 for nome in ARTES:

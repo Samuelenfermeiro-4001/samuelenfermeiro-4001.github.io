@@ -14,7 +14,7 @@ from PIL import Image
 RAIZ = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "molduras")
 MOLDURAS = [
     ("perfil-1x1.webp", "Foto de perfil 1:1"),
-    ("story-azul.webp", "Story 9:16"),
+    ("post-45.webp",    "Post 4:5"),
 ]
 
 def componentes(mask, W, H, minimo=200):
