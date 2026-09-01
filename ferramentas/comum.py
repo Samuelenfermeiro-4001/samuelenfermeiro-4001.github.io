@@ -129,16 +129,18 @@ def distancia_ao_escuro(px, W, H, teto):
             d[b + x] = min(v, G)
     return d
 
-def come_halo(sil, buraco_bin, px, W, H, teto, e_halo=None):
+def come_halo(sil, buraco_bin, px, W, H, teto, e_halo=None, alcance=20):
     """Tira da silhueta o halo claro que o candidato trouxe do recorte antigo.
 
     So come pixel claro que esteja perto de algo escuro — assim o halo em volta
     do cabelo e do rosto some, e a camisa branca, que nao tem escuro por perto,
-    fica inteira.
+    fica inteira. E so ate `alcance` px para dentro da borda: sem esse limite a
+    limpeza desce pelas costuras da camisa, que tambem tem escuro ao lado, e
+    abre riscos finos no meio do peito dele.
     """
     e_halo = e_halo or claro
     d = distancia_ao_escuro(px, W, H, teto)
-    fila = []
+    fila = []; prof = {}
     for y in range(H):
         b = y * W
         for x in range(W):
@@ -146,27 +148,48 @@ def come_halo(sil, buraco_bin, px, W, H, teto, e_halo=None):
             if not sil[i]: continue
             if (x and buraco_bin[i-1]) or (x < W-1 and buraco_bin[i+1]) or \
                (y and buraco_bin[i-W]) or (y < H-1 and buraco_bin[i+W]):
-                fila.append(i)
+                fila.append(i); prof[i] = 0
     comidos = 0; k = 0
     while k < len(fila):
         i = fila[k]; k += 1
         if not sil[i]: continue
+        p = prof[i]
+        if p > alcance: continue
         x = i % W; y = i // W
         if not (e_halo(px[x, y]) and d[i] <= teto): continue
         sil[i] = 0; comidos += 1
         for nx, ny in ((x-1,y),(x+1,y),(x,y-1),(x,y+1)):
-            if 0 <= nx < W and 0 <= ny < H and sil[ny*W+nx]: fila.append(ny*W+nx)
+            if 0 <= nx < W and 0 <= ny < H:
+                j = ny * W + nx
+                if sil[j] and (j not in prof or prof[j] > p + 1):
+                    prof[j] = p + 1; fila.append(j)
     return comidos
 
 
-def limpa_sobras(sil, px, W, H, k=9):
-    """Tira da silhueta as sobras claras soltas do recorte antigo.
+def limpa_sobras(sil, buraco_bin, px, W, H, k=9, alcance=30):
+    """Tira as sobras claras soltas que o recorte antigo deixou junto a borda.
 
-    Abertura aplicada so na parte clara: flocos e linguetas finas de halo somem,
-    a camisa (uma area clara grande) fica, e o cabelo, que e escuro, nem entra
-    na conta.
+    A abertura so pode agir perto do buraco: no meio do corpo dele a camisa tem
+    vincos e sombras que estreitam a mascara clara, e uma abertura ali abriria
+    riscos de um pixel atravessando a camisa.
     """
     from PIL import Image, ImageFilter
+    perto = bytearray(W * H)
+    fila = [i for i in range(W * H) if buraco_bin[i]]
+    dist = {i: 0 for i in fila}
+    k0 = 0
+    while k0 < len(fila):
+        i = fila[k0]; k0 += 1
+        d = dist[i]
+        if d >= alcance: continue
+        x = i % W; y = i // W
+        for nx, ny in ((x-1,y),(x+1,y),(x,y-1),(x,y+1)):
+            if 0 <= nx < W and 0 <= ny < H:
+                j = ny * W + nx
+                if j not in dist:
+                    dist[j] = d + 1
+                    if sil[j]: perto[j] = 1
+                    fila.append(j)
     claro_img = Image.new("L", (W, H), 0); cp = claro_img.load()
     for y in range(H):
         b = y * W
@@ -179,6 +202,7 @@ def limpa_sobras(sil, px, W, H, k=9):
     for y in range(H):
         b = y * W
         for x in range(W):
-            if sil[b + x] and cp[x, y] and not ap[x, y]:
-                sil[b + x] = 0; tirados += 1
+            i = b + x
+            if sil[i] and perto[i] and cp[x, y] and not ap[x, y]:
+                sil[i] = 0; tirados += 1
     return tirados

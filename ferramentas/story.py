@@ -103,7 +103,7 @@ def e_halo(p):
     return min(p)>=200 and max(p)-min(p)<=32 and (r-b)>=1
 comidos=comum.come_halo(sil,bin_buraco,px,W,H,teto=14,e_halo=e_halo)
 print("halo claro removido em volta dele: %d px"%comidos)
-print("sobras claras soltas removidas: %d px"%comum.limpa_sobras(sil,px,W,H,k=9))
+print("sobras claras soltas removidas: %d px"%comum.limpa_sobras(sil,bin_buraco,px,W,H,k=9))
 maior=comum.maior_pedaco(sil,W,H)
 sil=bytearray(W*H)
 for j in maior: sil[j]=1
@@ -113,13 +113,30 @@ for y in range(H):
         if sil[y*W+x]: sp[x,y]=255
 # fechamento tapa os furinhos que o recorte abriu dentro dele
 ms=ms.filter(ImageFilter.MaxFilter(9)).filter(ImageFilter.MinFilter(9))
-ms=ms.filter(ImageFilter.MedianFilter(3)).filter(ImageFilter.GaussianBlur(0.8)); sp=ms.load()
+ms=ms.filter(ImageFilter.MedianFilter(13)); sp=ms.load()
+# junta borda e silhueta ainda em preto e branco e suaviza uma vez so: duas
+# bordas suaves independentes se cruzam e deixam um fio translucido no meio
+# do corpo dele.
+final=Image.new("L",(W,H),0); fp=final.load()
+for y in range(H):
+    for x in range(W):
+        fp[x,y]=255 if (hp[x,y]>128 and sp[x,y]<=128) else 0
+# so o vazado principal vale: pontinhos soltos viram furo na roupa dele
+bin_final=bytearray(W*H); fpl=final.load()
+for y in range(H):
+    for x in range(W):
+        if fpl[x,y]>128: bin_final[y*W+x]=1
+principal=comum.maior_pedaco(bin_final,W,H)
+final=Image.new("L",(W,H),0); fpl=final.load()
+for j in principal: fpl[j%W,j//W]=255
+final=final.filter(ImageFilter.GaussianBlur(0.8)); hp=final.load()
+sp=Image.new("L",(W,H),0).load()
 
 out=Image.new("RGBA",(W,H)); op=out.load()
 minx,maxx,miny,maxy=W,0,H,0; soma=0; somax=0
 for y in range(H):
     for x in range(W):
-        v=hp[x,y]*(1.0-sp[x,y]/255.0)
+        v=hp[x,y]
         r,g,b=px[x,y]
         op[x,y]=(r,g,b,max(0,255-int(round(v))))
         if v>128:
