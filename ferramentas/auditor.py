@@ -84,16 +84,24 @@ def auditar(caminho, rotulo):
     if not comps:
         achados.append(("GRAVE", "nenhuma area vazada — a foto nao teria onde entrar"))
     elif len(comps) > 1:
-        # o corpo do candidato pode dividir o buraco em duas partes legitimas.
-        # so acusa quando a area extra e pequena demais para caber uma foto.
-        pequenas = [c for c in comps[1:] if c[0] < 8000]
-        if pequenas:
+        # Areas vazadas extras nem sempre sao defeito: os vaos entre os dedos da
+        # mao do candidato sao vazado legitimo — a foto aparece por ali, como na
+        # arte original. O que denuncia recorte comendo a arte e o tamanho: vao
+        # de dedo tem uns milhares de pixels; furo de recorte e um respingo.
+        extras = comps[1:]
+        respingos = [c for c in extras if c[0] < 400]
+        if respingos:
             achados.append(("ATENCAO",
-                "%d area(s) vazada(s) pequenas demais (%d px) — provavel furo na arte"
-                % (len(pequenas), sum(c[0] for c in pequenas))))
+                "%d respingo(s) vazado(s) na arte (%d px) — provavel furo do recorte"
+                % (len(respingos), sum(c[0] for c in respingos))))
+        legitimas = [c for c in extras if c[0] >= 400]
+        if legitimas:
+            achados.append(("INFO",
+                "%d area(s) vazada(s) alem do buraco principal (%s px) — vaos entre os dedos"
+                % (len(legitimas), ", ".join(str(c[0]) for c in legitimas))))
 
     # 2) furos dentro da arte: vazado pequeno e isolado
-    soltos = [c for c in comps[1:] if c[0] < n_vaz * 0.02]
+    soltos = [c for c in comps[1:] if c[0] < 400]
     if soltos:
         achados.append(("ATENCAO", "%d furos pequenos na arte (possivel recorte comendo o candidato)" % len(soltos)))
 
@@ -175,7 +183,7 @@ for arq, rotulo in MOLDURAS:
         print("   -> SEM PROBLEMAS")
     for nivel, msg in r["achados"]:
         print("   -> %s: %s" % (nivel, msg))
-        problemas += 1
+        if nivel != "INFO": problemas += 1
 
 print("\n" + "=" * 74)
 print("RESULTADO: %s" % ("nenhum problema encontrado" if problemas == 0
