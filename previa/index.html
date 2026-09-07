@@ -1086,13 +1086,51 @@
   })();
 
   /* ===================== formulários ===================== */
+  // Enquanto o envio sai pelo WhatsApp, a pagina diz isso antes de a pessoa
+  // preencher, e nao depois.
+  if (!CONFIG.emailFormulario && temWhats) {
+    document.querySelectorAll("form[data-form] .aviso-form").forEach(function (aviso) {
+      aviso.textContent = "Ao enviar, abrimos o WhatsApp da campanha com os seus dados já escritos. "
+        + "É só tocar em enviar por lá. " + aviso.textContent;
+    });
+  }
   document.querySelectorAll("form[data-form]").forEach(function (form) {
     var msg = form.querySelector("[data-msg]");
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       if (!CONFIG.emailFormulario) {
+        // Sem e-mail cadastrado, o formulario nao pode ficar engolindo o que a
+        // pessoa escreveu. Enquanto o e-mail nao vem, o envio monta uma
+        // mensagem com o que ela preencheu e abre o WhatsApp da campanha — o
+        // contato chega do mesmo jeito, so por outro caminho.
+        if (temWhats) {
+          var linhas = [];
+          form.querySelectorAll(".campo").forEach(function (campo) {
+            var rotulo = campo.querySelector("label");
+            var entrada = campo.querySelector("input, select, textarea");
+            if (!rotulo || !entrada) return;
+            var valor = (entrada.value || "").trim();
+            if (!valor) return;
+            linhas.push(rotulo.textContent.replace(/\s+/g, " ").trim() + ": " + valor);
+          });
+          var marcados = [];
+          form.querySelectorAll('input[type="checkbox"]:checked').forEach(function (caixa) {
+            var alvo = caixa.closest("label");
+            if (alvo) marcados.push(alvo.textContent.replace(/\s+/g, " ").trim());
+          });
+          if (marcados.length) linhas.push("Como quer participar: " + marcados.join(", "));
+          var texto = "Olá! Vim pelo site do Samuel Enfermeiro — "
+            + form.getAttribute("data-form") + "\n\n" + linhas.join("\n");
+          window.open("https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(texto),
+                      "_blank", "noopener");
+          form.reset();
+          msg.className = "form-msg";
+          msg.textContent = "";
+          toast("Abrimos o WhatsApp com seus dados. É só tocar em enviar.");
+          return;
+        }
         msg.className = "form-msg erro";
-        msg.textContent = "Formulário ainda não configurado. Falta cadastrar o e-mail que vai receber os contatos.";
+        msg.textContent = "Não foi possível enviar agora. Fale com a equipe pelo WhatsApp.";
         return;
       }
       var btn = form.querySelector('button[type="submit"]');
