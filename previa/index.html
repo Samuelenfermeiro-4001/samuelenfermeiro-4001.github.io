@@ -1030,9 +1030,10 @@
   (function () {
     var alvo = document.getElementById("mosaico-amigos");
     if (!amigos.length) {
-      alvo.innerHTML =
-        '<div class="vazio">As fotos dos amigos do Samuel aparecem aqui.<br>' +
-        'Coloque as imagens na pasta <code>/amigos/</code> e acrescente uma linha na lista <code>amigos</code>.</div>';
+      // Enquanto nao houver foto de apoiador com autorizacao, o mosaico
+      // simplesmente nao aparece. A instrucao de como adicionar fica no
+      // comentario da lista `amigos`, la em cima — nunca na tela de quem visita.
+      alvo.remove();
       return;
     }
     var html = '<div class="mosaico">';
