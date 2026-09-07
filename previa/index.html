@@ -1119,8 +1119,11 @@
             if (alvo) marcados.push(alvo.textContent.replace(/\s+/g, " ").trim());
           });
           if (marcados.length) linhas.push("Como quer participar: " + marcados.join(", "));
+          var nomes = { amigos: "Quero ser amigo do Samuel",
+                        receber: "Quero receber o Samuel no meu bairro" };
+          var qual = form.getAttribute("data-form");
           var texto = "Olá! Vim pelo site do Samuel Enfermeiro — "
-            + form.getAttribute("data-form") + "\n\n" + linhas.join("\n");
+            + (nomes[qual] || qual) + "\n\n" + linhas.join("\n");
           window.open("https://wa.me/" + CONFIG.whatsapp + "?text=" + encodeURIComponent(texto),
                       "_blank", "noopener");
           form.reset();
