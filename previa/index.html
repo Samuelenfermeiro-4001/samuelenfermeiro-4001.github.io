@@ -325,7 +325,38 @@
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .pular{position:absolute;left:-9999px}
   .pular:focus{left:12px;top:12px;z-index:99;background:#fff;padding:10px 16px}
-</style>
+
+  /* =====================================================================
+     LEITURA NO CELULAR
+     A pagina mora no link da bio: quase todo mundo chega pelo telefone, com
+     o aparelho na mao e sem paciencia para apertar os olhos. Aqui o texto
+     cresce onde a tela e estreita. Os campos de formulario ficam em 16px de
+     proposito: abaixo disso o iOS da zoom sozinho ao tocar no campo.
+     ===================================================================== */
+  @media(max-width:700px){
+    body{font-size:17.5px;line-height:1.62}
+    .eyebrow{font-size:13px}
+    .lede,.hero .lede{font-size:19.5px;line-height:1.55}
+    .hero h1{font-size:clamp(42px,10.4vw,68px)}
+    .foto-grid h2,.sec-head h2{font-size:clamp(32px,8vw,44px)}
+    .fechamento h2{font-size:clamp(34px,8.6vw,52px)}
+    .btn{font-size:16px;padding:16px 22px}
+    .btn-sm{font-size:14.5px;padding:13px 18px}
+    .passos li{font-size:17px;padding-left:44px}
+    .acao h3{font-size:21px}
+    .acao p{font-size:16px}
+    .acao .seta{font-size:14px}
+    .campo label{font-size:14.5px}
+    .campo input,.campo select,.campo textarea{font-size:16px;padding:15px 14px}
+    .check{font-size:16px}
+    .aviso-form{font-size:14.5px}
+    .lei-destaque h3{font-size:23px}
+    .lei-destaque p{font-size:16.5px}
+    .numero span{font-size:16px}
+    .amigo figcaption{font-size:14px}
+    .amigo figcaption span{font-size:12.5px}
+  }
+  </style>
 </head>
 <body>
 
