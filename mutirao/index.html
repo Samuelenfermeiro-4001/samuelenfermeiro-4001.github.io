@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mutirão do Samuel Enfermeiro</title>
-<meta name="description" content="Toque na imagem e siga o Samuel Enfermeiro no Instagram.">
-<!-- Prévia do link no WhatsApp: a arte aparece no card e o toque nela abre esta página, que leva ao Instagram -->
+<meta name="description" content="Toque na arte para entrar no grupo Mutirão do Samuel Enfermeiro ou seguir no Instagram.">
+<!-- Prévia do link no WhatsApp: a arte aparece no card; o toque abre esta página, onde a própria arte é clicável -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Samuel Enfermeiro">
 <meta property="og:url" content="https://samuelenfermeiro-4001.github.io/mutirao/">
 <meta property="og:title" content="Mutirão do Samuel Enfermeiro">
-<meta property="og:description" content="Toque na imagem e siga @samuelenfermeiro no Instagram.">
+<meta property="og:description" content="Toque na arte para entrar no grupo ou seguir @samuelenfermeiro no Instagram.">
 <meta property="og:image" content="https://samuelenfermeiro-4001.github.io/mutirao/previa-whatsapp.jpg?v=2">
 <meta property="og:image:secure_url" content="https://samuelenfermeiro-4001.github.io/mutirao/previa-whatsapp.jpg?v=2">
 <meta property="og:image:type" content="image/jpeg">
@@ -20,15 +20,23 @@
 <meta property="og:locale" content="pt_BR">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0E2A7A">
-<script>
-  // Sem meta refresh de propósito: o robô do WhatsApp o seguiria e mostraria a prévia do Instagram no lugar da arte
-  location.replace("https://www.instagram.com/samuelenfermeiro/");
-</script>
 <style>
   body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0E2A7A;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#fff}
-  main{width:min(92vw,480px);padding:24px 0;text-align:center}
-  img{display:block;width:100%;height:auto;border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.35)}
-  .botoes{display:grid;gap:12px;margin-top:20px}
+  main{width:min(94vw,520px);padding:18px 0 28px;text-align:center}
+  .dica{margin:0 0 12px;font-size:15px;line-height:1.35;color:#FFC72C;font-weight:600}
+  .arte{position:relative;border-radius:16px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+  .arte img{display:block;width:100%;height:auto}
+  .arte a{position:absolute;-webkit-tap-highlight-color:rgba(255,199,44,.35)}
+  .arte a:focus-visible{outline:3px solid #FFC72C;outline-offset:2px}
+  /* Areas medidas sobre arte.jpg (1198x1503) */
+  .fundo{inset:0}
+  .botao-grupo{left:5.84%;top:29.81%;width:39.23%;height:6.65%;border-radius:999px}
+  .qr-grupo{left:6.18%;top:37.26%;width:27.55%;height:27.15%;border-radius:12px}
+  .faixa-insta{left:0;top:87.36%;width:100%;height:12.64%}
+  .botao-grupo::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 rgba(255,199,44,.9);animation:pulso 1.8s ease-out infinite}
+  @keyframes pulso{0%{box-shadow:0 0 0 0 rgba(255,199,44,.85)}100%{box-shadow:0 0 0 14px rgba(255,199,44,0)}}
+  @media (prefers-reduced-motion:reduce){.botao-grupo::after{animation:none;box-shadow:0 0 0 3px #FFC72C}}
+  .botoes{display:grid;gap:12px;margin-top:18px}
   .botoes a{display:block;padding:15px 18px;border-radius:999px;font-weight:700;font-size:17px;text-decoration:none}
   .grupo{background:#FFC72C;color:#0E2A7A}
   .insta{background:#fff;color:#0E2A7A}
@@ -36,9 +44,14 @@
 </head>
 <body>
 <main>
-  <a href="https://www.instagram.com/samuelenfermeiro/" aria-label="Seguir o Samuel Enfermeiro no Instagram">
-    <img src="arte.jpg" width="1198" height="1503" alt="Faça parte do grupo Mutirão do Samuel Enfermeiro no WhatsApp">
-  </a>
+  <p class="dica">Toque em “Entrar no grupo” ou no QR Code da arte</p>
+  <div class="arte">
+    <img src="arte.jpg?v=2" width="1198" height="1503" alt="Faça parte do grupo Mutirão do Samuel Enfermeiro no WhatsApp">
+    <a class="fundo" href="https://www.instagram.com/samuelenfermeiro/" aria-label="Seguir o Samuel Enfermeiro no Instagram"></a>
+    <a class="faixa-insta" href="https://www.instagram.com/samuelenfermeiro/" aria-label="Me siga no Instagram"></a>
+    <a class="qr-grupo" href="https://chat.whatsapp.com/Hd8Yf2j2q63KuOYK6g8QCI?mode=gi_t" aria-label="Entrar no grupo pelo QR Code"></a>
+    <a class="botao-grupo" href="https://chat.whatsapp.com/Hd8Yf2j2q63KuOYK6g8QCI?mode=gi_t" aria-label="Entrar no grupo"></a>
+  </div>
   <div class="botoes">
     <a class="grupo" href="https://chat.whatsapp.com/Hd8Yf2j2q63KuOYK6g8QCI?mode=gi_t">Entrar no grupo</a>
     <a class="insta" href="https://www.instagram.com/samuelenfermeiro/">Me siga no Instagram</a>
