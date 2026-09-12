@@ -118,9 +118,19 @@ supportBtn.addEventListener('click', async () => {
 
 /* ---------------- compartilhamento ---------------- */
 
+function shareText(url) {
+  return [
+    'Quero te apresentar o Samuel Enfermeiro 💙',
+    '',
+    'Eu conheço ele e conheço a história dele: é gente como a gente. Agora está candidato a Deputado Federal.',
+    '',
+    `Dá uma olhada — se eu conheço, quero que você conheça também: ${url}`
+  ].join('\n');
+}
+
 shareBtn.addEventListener('click', async () => {
   const url = shareUrl();
-  const text = `Quero te apresentar o Samuel Enfermeiro 4001. Dá uma olhada aqui e, se puder contar com seu apoio, confirme no link: ${url}`;
+  const text = shareText(url);
 
   if (navigator.share) {
     try {

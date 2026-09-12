@@ -167,9 +167,9 @@ body::before {
 .insta {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
+  gap: 10px;
   margin: -6px 0 0;
-  padding: 11px 18px;
+  padding: 9px 18px;
   border-radius: 99px;
   border: 1.5px solid rgba(255, 255, 255, 0.26);
   color: rgba(255, 255, 255, 0.9);
@@ -180,6 +180,23 @@ body::before {
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
   transition: border-color 0.18s ease, color 0.18s ease, transform 0.14s ease;
+}
+
+.insta-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: left;
+}
+
+.insta-text strong { font-weight: 900; }
+
+.insta-text small {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: none;
+  opacity: 0.68;
 }
 
 .insta:active { transform: scale(0.97); }
@@ -221,7 +238,8 @@ body::before {
 /* ---------- TELAS PEQUENAS (iPhone SE) ---------- */
 @media (max-height: 700px) {
   .app { gap: 18px; }
-  .insta { padding: 9px 15px; font-size: 11.5px; }
+  .insta { padding: 8px 15px; font-size: 11.5px; }
+  .insta-text small { display: none; }
   .art { max-width: 260px; }
   .btn { min-height: 58px; }
 }
