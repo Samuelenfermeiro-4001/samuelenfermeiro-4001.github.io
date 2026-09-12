@@ -89,10 +89,37 @@ async function fetchRows() {
   return data ?? [];
 }
 
+async function fetchContatos() {
+  if (isDemo) {
+    return [
+      { id: 'd1', telefone: '+5511988887777', referrer: 'amigo',    created_at: new Date(Date.now() - 3.6e6).toISOString() },
+      { id: 'd2', telefone: '+5511977776666', referrer: null,       created_at: new Date(Date.now() - 9e6).toISOString() },
+      { id: 'd3', telefone: '+5511966665555', referrer: 'whatsapp', created_at: new Date(Date.now() - 9e7).toISOString() }
+    ];
+  }
+
+  const { data, error } = await supabase
+    .from('contatos')
+    .select('id,telefone,referrer,created_at')
+    .order('created_at', { ascending: false })
+    .limit(5000);
+
+  if (error) throw error;
+  return data ?? [];
+}
+
+// +5511988887777 -> (11) 98888-7777
+function formatPhone(raw) {
+  const d = String(raw || '').replace(/\D/g, '').replace(/^55/, '');
+  if (d.length === 11) return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+  if (d.length === 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  return raw;
+}
+
 async function loadDashboard() {
   setStatus('#dash-status', 'Atualizando...');
 
-  const rows = await fetchRows();
+  const [rows, contatos] = await Promise.all([fetchRows(), fetchContatos()]);
   const today = dayKey(new Date());
 
   // ---- KPIs ----
@@ -116,6 +143,7 @@ async function loadDashboard() {
   $('#kpi-today').textContent = counts.get(today) || 0;
   $('#kpi-week').textContent = [...weekKeys].reduce((sum, key) => sum + (counts.get(key) || 0), 0);
   $('#kpi-friends').textContent = sources.get('amigo') || 0;
+  $('#kpi-phones').textContent = contatos.length;
 
   // ---- Apoios por dia (últimos 14 dias) ----
   const byDay = Array.from({ length: 14 }, (_, i) => {
@@ -136,6 +164,22 @@ async function loadDashboard() {
     .map(([origin, value]) => ({ label: labels[origin] || origin, value }));
 
   renderBars('#by-source', bySource, { fillClass: 'navy' });
+
+  // ---- Números deixados ----
+  $('#phones-count').textContent = contatos.length
+    ? `${contatos.length} número(s)`
+    : '';
+
+  $('#phone-rows').innerHTML = contatos.map((c) => {
+    const bonito = formatPhone(c.telefone);
+    const link = `https://wa.me/${String(c.telefone).replace(/\D/g, '')}`;
+    return `
+    <tr>
+      <td>${stampFormatter.format(new Date(c.created_at))}</td>
+      <td><a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(bonito)}</a></td>
+      <td>${escapeHtml(labels[c.referrer || 'direto'] || c.referrer)}</td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="3">Ninguém deixou número ainda.</td></tr>';
 
   // ---- Tabela ----
   const latest = rows.slice(0, 300);

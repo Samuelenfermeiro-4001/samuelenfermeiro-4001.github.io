@@ -1,6 +1,6 @@
 // PWA do Samuel 4001.
 // Suba a versão do cache sempre que publicar uma alteração nos arquivos.
-const CACHE = 'samuel4001-v7';
+const CACHE = 'samuel4001-v8';
 
 const PRECACHE = [
   './',

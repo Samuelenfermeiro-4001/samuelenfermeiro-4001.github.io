@@ -122,6 +122,8 @@
 
     /* KPIs */
     .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    td a { color: var(--navy); font-weight: 800; text-decoration: none; }
+    td a:hover { text-decoration: underline; }
 
     .card {
       background: #fff;
@@ -169,7 +171,7 @@
     .status.is-success { color: #1b7f4d; }
 
     @media (min-width: 720px) {
-      .cards { grid-template-columns: repeat(4, 1fr); }
+      .cards { grid-template-columns: repeat(5, 1fr); }
       .grid-2 { grid-template-columns: 1fr 1fr; }
       h1 { font-size: 25px; }
     }
@@ -226,6 +228,10 @@
           <span>Indicações de amigos</span>
           <strong id="kpi-friends">—</strong>
         </div>
+        <div class="card">
+          <span>Números deixados</span>
+          <strong id="kpi-phones">—</strong>
+        </div>
       </div>
 
       <div class="grid-2">
@@ -242,7 +248,27 @@
 
       <div class="panel">
         <div class="panel-head">
-          <h2>Registros</h2>
+          <h2>Números deixados</h2>
+          <span id="phones-count" class="muted"></span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Data / Hora</th><th>WhatsApp</th><th>Origem</th></tr>
+            </thead>
+            <tbody id="phone-rows"></tbody>
+          </table>
+        </div>
+        <p class="muted small">
+          Dado pessoal, deixado de livre vontade por quem apoiou, com o aviso de
+          finalidade na tela. Use só para a equipe falar com a pessoa. Toque no
+          número para abrir a conversa no WhatsApp.
+        </p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Apoios registrados</h2>
           <span id="table-count" class="muted"></span>
         </div>
         <div class="table-wrap">
@@ -254,7 +280,7 @@
           </table>
         </div>
         <p class="muted small">
-          Nenhum dado pessoal é coletado pelo app: apenas data, origem e o apoio.
+          A contagem de apoios é anônima: só data, origem e o apoio.
         </p>
       </div>
 

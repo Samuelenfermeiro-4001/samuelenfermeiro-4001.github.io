@@ -6,6 +6,11 @@ import { SUPABASE_URL, SUPABASE_ANON_KEY, PUBLIC_APP_URL, INSTAGRAM_URL } from '
 
 const SUPPORT_KEY = 'samuel4001_apoio';   // evita clique duplicado no mesmo navegador
 const REF_KEY = 'samuel4001_ref';         // guarda a origem da visita
+const PHONE_KEY = 'samuel4001_contato';   // marca que este navegador já deixou o número
+const ID_KEY = 'samuel4001_apoio_id';     // liga o número ao apoio da mesma pessoa
+
+const CONSENT_TEXT =
+  'Só a equipe da campanha usa para falar com você. Nada de propaganda de terceiros.';
 
 const isConfigured =
   typeof SUPABASE_URL === 'string' &&
@@ -19,6 +24,10 @@ const supportBtn = document.querySelector('#support');
 const shareBtn = document.querySelector('#share');
 const feedback = document.querySelector('#feedback');
 const instaLink = document.querySelector('#instagram');
+const phoneStep = document.querySelector('#phone-step');
+const phoneForm = document.querySelector('#phone-form');
+const phoneInput = document.querySelector('#phone');
+const phoneButton = phoneForm.querySelector('.btn-send');
 const supportLabel = supportBtn.querySelector('.btn-label');
 
 /* ---------------- utilidades ---------------- */
@@ -78,18 +87,86 @@ function markAsSupported({ animateShare } = {}) {
 /* ---------------- registro do apoio ---------------- */
 
 async function registerSupport(referrer) {
+  // O id é gerado aqui para ligar o número ao apoio sem precisar ler a base.
+  const id = crypto.randomUUID();
+
   if (!isConfigured) {
     // Modo demonstração: funciona antes de configurar o Supabase.
-    return { demo: true };
+    return { demo: true, id };
   }
 
   const { error } = await supabase
     .from('responses')
-    .insert({ choice: 'sim', referrer });
+    .insert({ id, choice: 'sim', referrer });
 
   if (error) throw error;
-  return { demo: false };
+  return { demo: false, id };
 }
+
+/* ---------------- número de WhatsApp (opcional) ---------------- */
+
+// Guarda só dígitos e mostra (11) 99999-9999 enquanto a pessoa digita.
+function formatPhone(value) {
+  const d = value.replace(/\D/g, '').slice(0, 11);
+  if (d.length <= 2) return d.length ? `(${d}` : '';
+  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+}
+
+function showPhoneStep() {
+  if (store('localStorage', PHONE_KEY)) return; // este navegador já deixou
+  phoneStep.hidden = false;
+}
+
+function closePhoneStep(message) {
+  phoneStep.classList.add('is-done');
+  phoneStep.innerHTML = `<h2>${message}</h2>`;
+}
+
+phoneInput.addEventListener('input', () => {
+  phoneInput.value = formatPhone(phoneInput.value);
+});
+
+phoneForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const digits = phoneInput.value.replace(/\D/g, '');
+
+  if (digits.length < 10 || digits.length > 11) {
+    setFeedback('Confira o número: é DDD + o número, como (11) 99999-9999.', 'error');
+    phoneInput.focus();
+    return;
+  }
+
+  phoneButton.disabled = true;
+  setFeedback('Enviando seu número...');
+
+  const payload = {
+    response_id: store('localStorage', ID_KEY) || null,
+    telefone: `+55${digits}`,
+    consentimento: true,
+    texto_consentimento: CONSENT_TEXT,
+    referrer: readReferrer()
+  };
+
+  try {
+    if (isConfigured) {
+      const { error } = await supabase.from('contatos').insert(payload);
+      // 23505 = número já cadastrado. Para a pessoa, é sucesso do mesmo jeito.
+      if (error && error.code !== '23505') throw error;
+    }
+
+    store('localStorage', PHONE_KEY, '1');
+    closePhoneStep('Número recebido, obrigado! 💙');
+    setFeedback('Agora indique para um amigo — é o que mais ajuda a campanha.', 'success');
+    shareBtn.classList.add('is-next');
+  } catch (error) {
+    console.error(error);
+    phoneButton.disabled = false;
+    setFeedback('Não foi possível enviar agora. Tente novamente em alguns segundos.', 'error');
+  }
+});
 
 supportBtn.addEventListener('click', async () => {
   if (supportBtn.disabled) return;
@@ -99,8 +176,9 @@ supportBtn.addEventListener('click', async () => {
   setFeedback('Registrando seu apoio...');
 
   try {
-    const { demo } = await registerSupport(readReferrer());
+    const { demo, id } = await registerSupport(readReferrer());
     store('localStorage', SUPPORT_KEY, new Date().toISOString());
+    store('localStorage', ID_KEY, id);
     markAsSupported({ animateShare: true });
     setFeedback(
       demo
@@ -108,6 +186,7 @@ supportBtn.addEventListener('click', async () => {
         : 'Obrigado! Seu apoio foi registrado.',
       'success'
     );
+    showPhoneStep();
   } catch (error) {
     console.error(error);
     supportBtn.disabled = false;
@@ -160,4 +239,7 @@ if (instaUrl) {
 if (store('localStorage', SUPPORT_KEY)) {
   markAsSupported();
   setFeedback('Seu apoio já está registrado. Agora indique para um amigo.', 'success');
+  showPhoneStep();
+} else {
+  phoneStep.hidden = true;
 }
