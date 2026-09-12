@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#253767" />
+  <title>Samuel Enfermeiro 4001</title>
+
+  <meta name="description" content="Posso contar com seu voto? Samuel Enfermeiro 4001 — Deputado Federal." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Samuel Enfermeiro 4001" />
+  <meta property="og:description" content="Posso contar com seu voto?" />
+  <meta property="og:image" content="assets/samuel-4001.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/icon-192.png" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Samuel 4001" />
+  <link rel="preload" as="image" href="assets/samuel-4001.jpg" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <div class="art">
+      <img src="assets/samuel-4001.jpg" width="640" height="640"
+           alt="Samuel Enfermeiro, candidato a Deputado Federal, número 4001, PSB 40." />
+    </div>
+
+    <h1 class="question">Posso contar com seu <em>voto</em>?</h1>
+
+    <div class="actions">
+      <button id="support" class="btn btn-yes" type="button">
+        <span class="btn-label">✓ SIM, PODE CONTAR COMIGO</span>
+      </button>
+
+      <button id="share" class="btn btn-share" type="button">
+        <span class="btn-label">↗ INDIQUE PARA UM AMIGO</span>
+      </button>
+    </div>
+
+    <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+
+    <a id="instagram" class="insta" href="#" target="_blank" rel="noopener noreferrer" hidden>
+      <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true" focusable="false">
+        <rect x="2.6" y="2.6" width="18.8" height="18.8" rx="5.4" fill="none" stroke="currentColor" stroke-width="1.9"/>
+        <circle cx="12" cy="12" r="4.3" fill="none" stroke="currentColor" stroke-width="1.9"/>
+        <circle cx="17.4" cy="6.6" r="1.35" fill="currentColor"/>
+      </svg>
+      <span>VEJA O PERFIL E OS STORIES</span>
+    </a>
+
+    <footer class="footer">
+      Samuel Enfermeiro • Deputado Federal • 4001
+    </footer>
+  </main>
+
+  <script type="module" src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(() => {}));
+    }
+  </script>
+</body>
+</html>
