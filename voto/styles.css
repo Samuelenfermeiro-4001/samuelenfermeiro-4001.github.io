@@ -302,6 +302,19 @@ body::before {
   text-align: center;
 }
 
+/* ---------- MODO COMPACTO ----------
+   Quando o campo do número aparece, a arte encolhe para tudo continuar
+   caber numa tela só. A imagem nunca é recortada, apenas exibida menor. */
+body.is-compact .app { gap: 17px; }
+
+body.is-compact .art { max-width: 232px; }
+
+body.is-compact .question { font-size: clamp(20px, 5.6vw, 25px); }
+
+body.is-compact .btn { min-height: 56px; }
+
+body.is-compact .feedback { font-size: 13.5px; }
+
 /* ---------- MOVIMENTO ---------- */
 @keyframes rise {
   from { opacity: 0; transform: translateY(14px) scale(0.97); }
@@ -322,7 +335,9 @@ body::before {
 /* ---------- TELAS PEQUENAS (iPhone SE) ---------- */
 @media (max-height: 700px) {
   .app { gap: 18px; }
-  .phone { padding: 13px 13px 10px; }
+  .phone { padding: 12px 12px 9px; }
+  body.is-compact .art { max-width: 180px; }
+  body.is-compact .app { gap: 14px; }
   .phone h2 { font-size: 14.5px; margin-bottom: 9px; }
   .phone input, .btn-send { min-height: 48px; }
   .insta { padding: 8px 15px; font-size: 11.5px; }

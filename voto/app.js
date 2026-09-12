@@ -117,6 +117,8 @@ function formatPhone(value) {
 function showPhoneStep() {
   if (store('localStorage', PHONE_KEY)) return; // este navegador já deixou
   phoneStep.hidden = false;
+  // A arte encolhe para o campo caber na mesma tela, sem rolagem.
+  document.body.classList.add('is-compact');
 }
 
 function closePhoneStep(message) {
