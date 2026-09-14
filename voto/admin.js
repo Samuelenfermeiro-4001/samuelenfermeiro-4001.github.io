@@ -92,15 +92,15 @@ async function fetchRows() {
 async function fetchContatos() {
   if (isDemo) {
     return [
-      { id: 'd1', telefone: '+5511988887777', referrer: 'amigo',    created_at: new Date(Date.now() - 3.6e6).toISOString() },
-      { id: 'd2', telefone: '+5511977776666', referrer: null,       created_at: new Date(Date.now() - 9e6).toISOString() },
-      { id: 'd3', telefone: '+5511966665555', referrer: 'whatsapp', created_at: new Date(Date.now() - 9e7).toISOString() }
+      { id: 'd1', telefone: '+5511988887777', bairro: 'Jardim Zaíra', cidade: 'Mauá', referrer: 'amigo', created_at: new Date(Date.now() - 3.6e6).toISOString() },
+      { id: 'd2', telefone: null, bairro: 'Vila Magini', cidade: 'Mauá', referrer: null, created_at: new Date(Date.now() - 9e6).toISOString() },
+      { id: 'd3', telefone: '+5511966665555', bairro: 'Jardim Zaíra', cidade: 'Mauá', referrer: 'whatsapp', created_at: new Date(Date.now() - 9e7).toISOString() }
     ];
   }
 
   const { data, error } = await supabase
     .from('contatos')
-    .select('id,telefone,referrer,created_at')
+    .select('id,telefone,bairro,cidade,referrer,created_at')
     .order('created_at', { ascending: false })
     .limit(5000);
 
@@ -143,7 +143,8 @@ async function loadDashboard() {
   $('#kpi-today').textContent = counts.get(today) || 0;
   $('#kpi-week').textContent = [...weekKeys].reduce((sum, key) => sum + (counts.get(key) || 0), 0);
   $('#kpi-friends').textContent = sources.get('amigo') || 0;
-  $('#kpi-phones').textContent = contatos.length;
+  $('#kpi-phones').textContent = contatos.filter((c) => c.telefone).length;
+  $('#kpi-bairros').textContent = contatos.filter((c) => c.bairro).length;
 
   // ---- Apoios por dia (últimos 14 dias) ----
   const byDay = Array.from({ length: 14 }, (_, i) => {
@@ -165,21 +166,49 @@ async function loadDashboard() {
 
   renderBars('#by-source', bySource, { fillClass: 'navy' });
 
-  // ---- Números deixados ----
-  $('#phones-count').textContent = contatos.length
-    ? `${contatos.length} número(s)`
-    : '';
+  // ---- Votos por bairro e por cidade ----
+  // Agrupa sem diferenciar maiúsculas/acentos ("jardim zaira" = "Jardim Zaíra").
+  const chave = (t) => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+  const porBairro = new Map();
+  const porCidade = new Map();
+
+  for (const c of contatos) {
+    if (c.bairro) {
+      const k = `${chave(c.bairro)}|${chave(c.cidade)}`;
+      const atual = porBairro.get(k) || { label: c.cidade ? `${c.bairro} · ${c.cidade}` : c.bairro, value: 0 };
+      atual.value += 1;
+      porBairro.set(k, atual);
+    }
+    if (c.cidade) {
+      const k = chave(c.cidade);
+      const atual = porCidade.get(k) || { label: c.cidade, value: 0 };
+      atual.value += 1;
+      porCidade.set(k, atual);
+    }
+  }
+
+  const ordena = (m) => [...m.values()].sort((x, y) => y.value - x.value);
+  renderBars('#by-bairro', ordena(porBairro).slice(0, 15), { empty: 'Ninguém informou o bairro ainda.' });
+  renderBars('#by-cidade', ordena(porCidade).slice(0, 10), { fillClass: 'navy', empty: 'Ninguém informou a cidade ainda.' });
+
+  // ---- Números e bairros deixados ----
+  $('#phones-count').textContent = contatos.length ? `${contatos.length} registro(s)` : '';
 
   $('#phone-rows').innerHTML = contatos.map((c) => {
-    const bonito = formatPhone(c.telefone);
-    const link = `https://wa.me/${String(c.telefone).replace(/\D/g, '')}`;
+    let fone = '—';
+    if (c.telefone) {
+      const link = `https://wa.me/${String(c.telefone).replace(/\D/g, '')}`;
+      fone = `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(formatPhone(c.telefone))}</a>`;
+    }
     return `
     <tr>
       <td>${stampFormatter.format(new Date(c.created_at))}</td>
-      <td><a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(bonito)}</a></td>
+      <td>${escapeHtml(c.bairro || '—')}</td>
+      <td>${escapeHtml(c.cidade || '—')}</td>
+      <td>${fone}</td>
       <td>${escapeHtml(labels[c.referrer || 'direto'] || c.referrer)}</td>
     </tr>`;
-  }).join('') || '<tr><td colspan="3">Ninguém deixou número ainda.</td></tr>';
+  }).join('') || '<tr><td colspan="5">Ninguém deixou bairro ou número ainda.</td></tr>';
 
   // ---- Tabela ----
   const latest = rows.slice(0, 300);

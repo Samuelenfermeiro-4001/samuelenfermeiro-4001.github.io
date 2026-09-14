@@ -3,6 +3,7 @@
 
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 import { SUPABASE_URL, SUPABASE_ANON_KEY, PUBLIC_APP_URL, INSTAGRAM_URL } from './config.js';
+import { CIDADES, BAIRROS } from './localidades.js';
 
 const SUPPORT_KEY = 'samuel4001_apoio';   // evita clique duplicado no mesmo navegador
 const REF_KEY = 'samuel4001_ref';         // guarda a origem da visita
@@ -28,6 +29,10 @@ const phoneStep = document.querySelector('#phone-step');
 const phoneForm = document.querySelector('#phone-form');
 const phoneInput = document.querySelector('#phone');
 const phoneButton = phoneForm.querySelector('.btn-send');
+const bairroInput = document.querySelector('#bairro');
+const cidadeInput = document.querySelector('#cidade');
+const listaBairros = document.querySelector('#lista-bairros');
+const listaCidades = document.querySelector('#lista-cidades');
 const supportLabel = supportBtn.querySelector('.btn-label');
 
 /* ---------------- utilidades ---------------- */
@@ -130,23 +135,63 @@ phoneInput.addEventListener('input', () => {
   phoneInput.value = formatPhone(phoneInput.value);
 });
 
+/* ---------------- bairro e cidade ---------------- */
+
+const semAcento = (t) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+const limpa = (t) => t.replace(/\s+/g, ' ').trim();
+
+// Se o que foi digitado bate com uma sugestão, usa a grafia oficial.
+function canonico(valor, opcoes) {
+  const alvo = semAcento(valor);
+  return opcoes.find((o) => semAcento(o) === alvo) || limpa(valor);
+}
+
+function preencherLista(datalist, opcoes) {
+  datalist.innerHTML = opcoes.map((o) => `<option value="${o.replace(/"/g, '&quot;')}"></option>`).join('');
+}
+
+function bairrosDaCidade() {
+  const cidade = canonico(cidadeInput.value, CIDADES);
+  return BAIRROS[cidade] || [];
+}
+
+preencherLista(listaCidades, CIDADES);
+preencherLista(listaBairros, bairrosDaCidade());
+cidadeInput.addEventListener('change', () => preencherLista(listaBairros, bairrosDaCidade()));
+
 phoneForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   const digits = phoneInput.value.replace(/\D/g, '');
+  const bairro = limpa(bairroInput.value) ? canonico(bairroInput.value, bairrosDaCidade()) : '';
+  const cidade = limpa(cidadeInput.value) ? canonico(cidadeInput.value, CIDADES) : '';
 
-  if (digits.length < 10 || digits.length > 11) {
+  if (!bairro && !digits) {
+    setFeedback('Conta pra gente pelo menos o seu bairro.', 'error');
+    bairroInput.focus();
+    return;
+  }
+
+  if (bairro && bairro.length < 2) {
+    setFeedback('Confira o nome do bairro.', 'error');
+    bairroInput.focus();
+    return;
+  }
+
+  if (digits && (digits.length < 10 || digits.length > 11)) {
     setFeedback('Confira o número: é DDD + o número, como (11) 99999-9999.', 'error');
     phoneInput.focus();
     return;
   }
 
   phoneButton.disabled = true;
-  setFeedback('Enviando seu número...');
+  setFeedback('Enviando...');
 
   const payload = {
     response_id: store('localStorage', ID_KEY) || null,
-    telefone: `+55${digits}`,
+    telefone: digits ? `+55${digits}` : null,
+    bairro: bairro || null,
+    cidade: cidade || null,
     consentimento: true,
     texto_consentimento: CONSENT_TEXT,
     referrer: readReferrer()
@@ -160,7 +205,7 @@ phoneForm.addEventListener('submit', async (event) => {
     }
 
     store('localStorage', PHONE_KEY, '1');
-    closePhoneStep('Número recebido, obrigado! 💙');
+    closePhoneStep('Recebido, obrigado! 💙');
     setFeedback('Agora indique para um amigo — é o que mais ajuda a campanha.', 'success');
     shareBtn.classList.add('is-next');
   } catch (error) {

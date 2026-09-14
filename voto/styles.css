@@ -175,7 +175,7 @@ body::before {
 }
 
 .phone h2 {
-  margin: 0 0 11px;
+  margin: 0 0 10px;
   font-size: 15.5px;
   font-weight: 900;
   letter-spacing: 0.2px;
@@ -185,21 +185,48 @@ body::before {
 
 .phone form {
   display: grid;
-  grid-template-columns: 1fr auto;
   gap: 9px;
+}
+
+.row-local {
+  display: grid;
+  grid-template-columns: 1.45fr 1fr;
+  gap: 8px;
+}
+
+.row-phone {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+
+.field {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  text-align: left;
+}
+
+.field > span {
+  padding-left: 4px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .phone input {
   width: 100%;
   min-width: 0;
-  min-height: 54px;
-  padding: 14px 16px;
+  min-height: 50px;
+  padding: 12px 14px;
   border: 0;
-  border-radius: 14px;
+  border-radius: 13px;
   background: var(--white);
   color: var(--navy-900);
   font: inherit;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 800;
   letter-spacing: 0.4px;
 }
@@ -209,7 +236,7 @@ body::before {
 .phone input:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
 
 .btn-send {
-  min-height: 54px;
+  min-height: 50px;
   padding: 0 20px;
   border: 0;
   border-radius: 14px;
@@ -305,9 +332,9 @@ body::before {
 /* ---------- MODO COMPACTO ----------
    Quando o campo do número aparece, a arte encolhe para tudo continuar
    caber numa tela só. A imagem nunca é recortada, apenas exibida menor. */
-body.is-compact .app { gap: 17px; }
+body.is-compact .app { gap: 14px; }
 
-body.is-compact .art { max-width: 232px; }
+body.is-compact .art { max-width: 176px; }
 
 body.is-compact .question { font-size: clamp(20px, 5.6vw, 25px); }
 
@@ -336,10 +363,14 @@ body.is-compact .feedback { font-size: 13.5px; }
 @media (max-height: 700px) {
   .app { gap: 18px; }
   .phone { padding: 12px 12px 9px; }
-  body.is-compact .art { max-width: 180px; }
-  body.is-compact .app { gap: 14px; }
+  body.is-compact .art { max-width: 104px; }
+  body.is-compact .app { gap: 10px; }
+  body.is-compact .question { font-size: 18px; }
+  body.is-compact .btn { min-height: 48px; padding: 12px; }
+  body.is-compact .phone-note { display: none; }
+  body.is-compact .insta-text small { display: none; }
   .phone h2 { font-size: 14.5px; margin-bottom: 9px; }
-  .phone input, .btn-send { min-height: 48px; }
+  .phone input, .btn-send { min-height: 44px; }
   .insta { padding: 8px 15px; font-size: 11.5px; }
   .insta-text small { display: none; }
   .art { max-width: 260px; }

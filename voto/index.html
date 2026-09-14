@@ -43,12 +43,33 @@
     <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
 
     <section id="phone-step" class="phone" hidden aria-labelledby="phone-title">
-      <h2 id="phone-title">Coloca aqui o seu número</h2>
+      <h2 id="phone-title">Falta pouco! Onde você vota?</h2>
       <form id="phone-form" novalidate>
-        <input id="phone" name="phone" type="tel" inputmode="numeric"
-               autocomplete="tel-national" placeholder="(11) 99999-9999"
-               maxlength="16" aria-describedby="phone-note" />
-        <button class="btn-send" type="submit">ENVIAR</button>
+        <div class="row-local">
+          <label class="field">
+            <span>Bairro</span>
+            <input id="bairro" name="bairro" type="text" list="lista-bairros"
+                   autocomplete="off" autocapitalize="words" maxlength="80"
+                   placeholder="Ex.: Jardim Zaíra" />
+          </label>
+          <label class="field">
+            <span>Cidade</span>
+            <input id="cidade" name="cidade" type="text" list="lista-cidades"
+                   autocomplete="address-level2" autocapitalize="words" maxlength="60"
+                   value="Mauá" />
+          </label>
+        </div>
+        <label class="field">
+          <span>Seu WhatsApp</span>
+          <div class="row-phone">
+            <input id="phone" name="phone" type="tel" inputmode="numeric"
+                   autocomplete="tel-national" placeholder="(11) 99999-9999"
+                   maxlength="16" aria-describedby="phone-note" />
+            <button class="btn-send" type="submit">ENVIAR</button>
+          </div>
+        </label>
+        <datalist id="lista-bairros"></datalist>
+        <datalist id="lista-cidades"></datalist>
       </form>
       <p id="phone-note" class="phone-note">
         Só a equipe da campanha usa para falar com você. Nada de propaganda de terceiros.
