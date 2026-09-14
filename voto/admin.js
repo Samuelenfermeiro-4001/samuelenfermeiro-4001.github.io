@@ -166,49 +166,8 @@ async function loadDashboard() {
 
   renderBars('#by-source', bySource, { fillClass: 'navy' });
 
-  // ---- Votos por bairro e por cidade ----
-  // Agrupa sem diferenciar maiúsculas/acentos ("jardim zaira" = "Jardim Zaíra").
-  const chave = (t) => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-  const porBairro = new Map();
-  const porCidade = new Map();
-
-  for (const c of contatos) {
-    if (c.bairro) {
-      const k = `${chave(c.bairro)}|${chave(c.cidade)}`;
-      const atual = porBairro.get(k) || { label: c.cidade ? `${c.bairro} · ${c.cidade}` : c.bairro, value: 0 };
-      atual.value += 1;
-      porBairro.set(k, atual);
-    }
-    if (c.cidade) {
-      const k = chave(c.cidade);
-      const atual = porCidade.get(k) || { label: c.cidade, value: 0 };
-      atual.value += 1;
-      porCidade.set(k, atual);
-    }
-  }
-
-  const ordena = (m) => [...m.values()].sort((x, y) => y.value - x.value);
-  renderBars('#by-bairro', ordena(porBairro).slice(0, 15), { empty: 'Ninguém informou o bairro ainda.' });
-  renderBars('#by-cidade', ordena(porCidade).slice(0, 10), { fillClass: 'navy', empty: 'Ninguém informou a cidade ainda.' });
-
-  // ---- Números e bairros deixados ----
-  $('#phones-count').textContent = contatos.length ? `${contatos.length} registro(s)` : '';
-
-  $('#phone-rows').innerHTML = contatos.map((c) => {
-    let fone = '—';
-    if (c.telefone) {
-      const link = `https://wa.me/${String(c.telefone).replace(/\D/g, '')}`;
-      fone = `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(formatPhone(c.telefone))}</a>`;
-    }
-    return `
-    <tr>
-      <td>${stampFormatter.format(new Date(c.created_at))}</td>
-      <td>${escapeHtml(c.bairro || '—')}</td>
-      <td>${escapeHtml(c.cidade || '—')}</td>
-      <td>${fone}</td>
-      <td>${escapeHtml(labels[c.referrer || 'direto'] || c.referrer)}</td>
-    </tr>`;
-  }).join('') || '<tr><td colspan="5">Ninguém deixou bairro ou número ainda.</td></tr>';
+  // ---- CRM: cidade -> bairro -> pessoas ----
+  renderCrm(contatos);
 
   // ---- Tabela ----
   const latest = rows.slice(0, 300);
@@ -231,6 +190,142 @@ async function loadDashboard() {
     isDemo ? '' : 'success'
   );
 }
+
+/* ---------------- CRM de votos ---------------- */
+
+// Agrupa sem diferenciar maiúsculas/acentos ("jardim zaira" = "Jardim Zaíra").
+const chave = (t) => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+
+const SEM_CIDADE = 'sem-cidade';
+const SEM_BAIRRO = 'sem-bairro';
+
+const crm = { pessoas: [], cidade: 'todas', bairro: null, busca: '' };
+
+function renderCrm(contatos) {
+  crm.pessoas = contatos.map((c) => ({
+    cidade: c.cidade || 'Cidade não informada',
+    cidadeKey: c.cidade ? chave(c.cidade) : SEM_CIDADE,
+    bairro: c.bairro || 'Bairro não informado',
+    bairroKey: c.bairro ? chave(c.bairro) : SEM_BAIRRO,
+    telefone: c.telefone,
+    created_at: c.created_at
+  }));
+
+  // Se a cidade escolhida sumiu da base, volta para "Todas".
+  if (crm.cidade !== 'todas' && !crm.pessoas.some((p) => p.cidadeKey === crm.cidade)) {
+    crm.cidade = 'todas';
+    crm.bairro = null;
+  }
+
+  const cidades = new Set(crm.pessoas.filter((p) => p.cidadeKey !== SEM_CIDADE).map((p) => p.cidadeKey));
+  const bairros = new Set(crm.pessoas.filter((p) => p.bairroKey !== SEM_BAIRRO).map((p) => `${p.cidadeKey}|${p.bairroKey}`));
+  $('#crm-resumo').textContent = `${crm.pessoas.length} pessoa(s) · ${cidades.size} cidade(s) · ${bairros.size} bairro(s)`;
+
+  drawCrm();
+}
+
+function agrupar(lista, campoKey, campoNome) {
+  const mapa = new Map();
+  for (const p of lista) {
+    const item = mapa.get(p[campoKey]) || { key: p[campoKey], label: p[campoNome], value: 0 };
+    item.value += 1;
+    mapa.set(p[campoKey], item);
+  }
+  // "não informado" sempre por último
+  return [...mapa.values()].sort((x, y) =>
+    (x.key === SEM_CIDADE || x.key === SEM_BAIRRO) - (y.key === SEM_CIDADE || y.key === SEM_BAIRRO) || y.value - x.value
+  );
+}
+
+function drawCrm() {
+  // ---- cidades (chips) ----
+  const cidades = agrupar(crm.pessoas, 'cidadeKey', 'cidade');
+  const chip = (key, nome, n) => `
+    <button class="chip" type="button" role="tab" data-cidade="${escapeHtml(key)}"
+            aria-selected="${crm.cidade === key}">
+      <strong>${escapeHtml(nome)}</strong><small>${n} voto(s)</small>
+    </button>`;
+
+  $('#crm-cidades').innerHTML = crm.pessoas.length
+    ? chip('todas', 'Todas', crm.pessoas.length) + cidades.map((c) => chip(c.key, c.label, c.value)).join('')
+    : '<p class="muted">Ninguém informou cidade ou bairro ainda.</p>';
+
+  const naCidade = crm.cidade === 'todas' ? crm.pessoas : crm.pessoas.filter((p) => p.cidadeKey === crm.cidade);
+  const nomeCidade = crm.cidade === 'todas' ? 'todas as cidades' : (naCidade[0]?.cidade || '');
+
+  // ---- bairros da cidade (clicáveis) ----
+  // Em "Todas", o mesmo nome de bairro em cidades diferentes fica separado.
+  const comChave = naCidade.map((p) => ({
+    ...p,
+    bKey: crm.cidade === 'todas' ? `${p.cidadeKey}|${p.bairroKey}` : p.bairroKey,
+    bNome: crm.cidade === 'todas' && p.bairroKey !== SEM_BAIRRO ? `${p.bairro} · ${p.cidade}` : p.bairro
+  }));
+  const bairros = agrupar(comChave, 'bKey', 'bNome');
+
+  $('#crm-bairros-titulo').textContent = `Bairros — ${nomeCidade}`;
+  const max = Math.max(1, ...bairros.map((b) => b.value));
+  $('#crm-bairros').innerHTML = bairros.map((b) => `
+    <li role="button" tabindex="0" data-bairro="${escapeHtml(b.key)}" aria-pressed="${crm.bairro === b.key}">
+      <span class="bar-label">${escapeHtml(b.label)}</span>
+      <span class="bar-value">${b.value}</span>
+      <span class="bar-track"><span class="bar-fill" style="width:${Math.max((b.value / max) * 100, 4)}%"></span></span>
+    </li>`).join('') || '<li class="muted">Nenhum bairro informado.</li>';
+
+  // ---- pessoas ----
+  const buscaTexto = chave(crm.busca);
+  const buscaDigitos = crm.busca.replace(/\D/g, '');
+  const pessoas = comChave
+    .filter((p) => !crm.bairro || p.bKey === crm.bairro)
+    .filter((p) => !buscaTexto
+      || chave(p.bairro).includes(buscaTexto)
+      || (buscaDigitos.length >= 3 && String(p.telefone || '').includes(buscaDigitos)))
+    .sort((x, y) => new Date(y.created_at) - new Date(x.created_at));
+
+  const bairroSel = crm.bairro ? bairros.find((b) => b.key === crm.bairro)?.label : null;
+  $('#crm-pessoas-titulo').textContent = `Pessoas — ${bairroSel || nomeCidade} (${pessoas.length})`;
+
+  $('#crm-pessoas').innerHTML = pessoas.map((p) => {
+    let fone = '—';
+    if (p.telefone) {
+      const link = `https://wa.me/${String(p.telefone).replace(/\D/g, '')}`;
+      fone = `<a href="${escapeHtml(link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(formatPhone(p.telefone))}</a>`;
+    }
+    const lugar = crm.cidade === 'todas' ? `${p.bairro} · ${p.cidade}` : p.bairro;
+    return `
+    <tr>
+      <td>${escapeHtml(lugar)}<span class="quando">${stampFormatter.format(new Date(p.created_at))}</span></td>
+      <td>${fone}</td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="2">Ninguém encontrado.</td></tr>';
+}
+
+$('#crm-cidades').addEventListener('click', (event) => {
+  const botao = event.target.closest('[data-cidade]');
+  if (!botao) return;
+  crm.cidade = botao.dataset.cidade;
+  crm.bairro = null;
+  drawCrm();
+});
+
+function escolherBairro(alvo) {
+  const item = alvo.closest('[data-bairro]');
+  if (!item) return;
+  crm.bairro = crm.bairro === item.dataset.bairro ? null : item.dataset.bairro;
+  drawCrm();
+}
+
+$('#crm-bairros').addEventListener('click', (event) => escolherBairro(event.target));
+$('#crm-bairros').addEventListener('keydown', (event) => {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    escolherBairro(event.target);
+  }
+});
+
+$('#crm-busca').addEventListener('input', (event) => {
+  crm.busca = event.target.value;
+  drawCrm();
+});
 
 function showDashboard() {
   $('#login-view').classList.add('hidden');

@@ -170,6 +170,44 @@
     .status.is-error { color: #b42318; }
     .status.is-success { color: #1b7f4d; }
 
+
+    /* ---------- CRM ---------- */
+    .crm h3 { margin: 0 0 10px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--ink); }
+    .crm-hint { margin: 2px 0 12px; font-size: 12.5px; color: var(--muted); }
+
+    .chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 16px; scrollbar-width: thin; }
+    .chip {
+      flex: 0 0 auto; display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
+      padding: 9px 14px; border: 1.5px solid var(--line); border-radius: 12px;
+      background: #fff; color: var(--ink); text-align: left;
+    }
+    .chip strong { font-size: 13.5px; }
+    .chip small { font-size: 11px; color: var(--muted); font-weight: 600; }
+    .chip[aria-selected="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+    .chip[aria-selected="true"] small { color: rgba(255,255,255,.75); }
+    .chip:hover { border-color: var(--navy); }
+
+    .crm-body { display: grid; gap: 18px; }
+    .crm-col { min-width: 0; }
+
+    .bars-click li { cursor: pointer; border-radius: 8px; padding: 4px 6px; margin: 0 -6px; }
+    .bars-click li:hover { background: #f3f5fa; }
+    .bars-click li[aria-pressed="true"] { background: #fff6dc; }
+    .bars-click li[aria-pressed="true"] .bar-label::after { content: "  ✕ limpar"; color: var(--muted); font-weight: 600; font-size: 11px; }
+
+    .crm-pessoas-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+    .crm-pessoas-head h3 { margin: 0; }
+    .crm-pessoas-head input { width: auto; flex: 1 1 180px; max-width: 260px; padding: 9px 12px; font-size: 13px; }
+
+    .crm-table { min-width: 0; }
+    .crm-table td { vertical-align: top; }
+    .crm-table td a { white-space: nowrap; }
+    .crm-table .quando { display: block; margin-top: 2px; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+    @media (min-width: 900px) {
+      .crm-body { grid-template-columns: minmax(240px, 1fr) 2fr; }
+    }
+
     @media (min-width: 720px) {
       .cards { grid-template-columns: repeat(3, 1fr); }
       .grid-2 { grid-template-columns: 1fr 1fr; }
@@ -238,6 +276,38 @@
         </div>
       </div>
 
+      <section class="panel crm" aria-labelledby="crm-title">
+        <div class="panel-head">
+          <h2 id="crm-title">CRM de votos</h2>
+          <span id="crm-resumo" class="muted"></span>
+        </div>
+
+        <p class="crm-hint">Toque numa cidade para ver os bairros e as pessoas. Toque num bairro para filtrar.</p>
+        <div id="crm-cidades" class="chips" role="tablist" aria-label="Cidades"></div>
+
+        <div class="crm-body">
+          <div class="crm-col">
+            <h3 id="crm-bairros-titulo">Bairros</h3>
+            <ul id="crm-bairros" class="bars bars-click"></ul>
+          </div>
+
+          <div class="crm-col">
+            <div class="crm-pessoas-head">
+              <h3 id="crm-pessoas-titulo">Pessoas</h3>
+              <input id="crm-busca" type="search" placeholder="Buscar bairro ou número" aria-label="Buscar bairro ou número" />
+            </div>
+            <div class="table-wrap">
+              <table class="crm-table">
+                <thead>
+                  <tr><th>Bairro</th><th>WhatsApp</th></tr>
+                </thead>
+                <tbody id="crm-pessoas"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div class="grid-2">
         <div class="panel">
           <h2>Apoios por dia</h2>
@@ -248,39 +318,6 @@
           <h2>Origem dos apoios</h2>
           <ul id="by-source" class="bars"></ul>
         </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="panel">
-          <h2>Votos por bairro</h2>
-          <ul id="by-bairro" class="bars"></ul>
-          <p class="muted small">Contagem de quem informou o bairro.</p>
-        </div>
-
-        <div class="panel">
-          <h2>Votos por cidade</h2>
-          <ul id="by-cidade" class="bars"></ul>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="panel-head">
-          <h2>Números e bairros deixados</h2>
-          <span id="phones-count" class="muted"></span>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr><th>Data / Hora</th><th>Bairro</th><th>Cidade</th><th>WhatsApp</th><th>Origem</th></tr>
-            </thead>
-            <tbody id="phone-rows"></tbody>
-          </table>
-        </div>
-        <p class="muted small">
-          Dado pessoal, deixado de livre vontade por quem apoiou, com o aviso de
-          finalidade na tela. Use só para a equipe falar com a pessoa. Toque no
-          número para abrir a conversa no WhatsApp.
-        </p>
       </div>
 
       <div class="panel">
